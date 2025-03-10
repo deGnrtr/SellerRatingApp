@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class CommentService {
     private final CommentRepository repository;
 
@@ -16,15 +15,18 @@ public class CommentService {
         this.repository = repository;
     }
 
+    @Transactional
     public Comment findById(int id) {
         Optional<Comment> requestedComment = repository.findById(id);
         return requestedComment.orElseThrow(RuntimeException::new);
     }
 
+    @Transactional
     public Comment save(Comment item) {
         return repository.save(item);
     }
 
+    @Transactional
     public void deleteById(int id) {
         repository.deleteById(id);
     }

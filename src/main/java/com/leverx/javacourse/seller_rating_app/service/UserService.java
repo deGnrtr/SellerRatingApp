@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 
     private UserRepository repository;
@@ -19,23 +18,28 @@ public class UserService {
         this.repository = repository;
     }
 
+    @Transactional
     public User findById(int id) {
         Optional<User> requestedUser = repository.findById(id);
         return requestedUser.orElseThrow(RuntimeException::new);
     }
 
+    @Transactional
     public User save(User user) {
         return repository.save(user);
     }
 
+    @Transactional
     public void deleteById(int id) {
         repository.deleteById(id);
     }
 
+    @Transactional
     public List<User> getUsersByRating(BigDecimal rating) {
         return repository.findByOrderByRatingDesc(rating);
     }
 
+    @Transactional
     public List<User> getUsersInRatingRange(BigDecimal begin, BigDecimal ends) {
         return repository.findByRatingRange(begin, ends);
     }
