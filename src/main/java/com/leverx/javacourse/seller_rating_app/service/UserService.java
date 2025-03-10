@@ -1,6 +1,6 @@
 package com.leverx.javacourse.seller_rating_app.service;
 
-import com.leverx.javacourse.seller_rating_app.entity.User;
+import com.leverx.javacourse.seller_rating_app.entity.model.User;
 import com.leverx.javacourse.seller_rating_app.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

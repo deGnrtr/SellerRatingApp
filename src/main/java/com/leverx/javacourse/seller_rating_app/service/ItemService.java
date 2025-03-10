@@ -1,6 +1,6 @@
 package com.leverx.javacourse.seller_rating_app.service;
 
-import com.leverx.javacourse.seller_rating_app.entity.Item;
+import com.leverx.javacourse.seller_rating_app.entity.model.Item;
 import com.leverx.javacourse.seller_rating_app.repository.ItemRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,6 @@ public class ItemService {
     }
 
     public List<Item> findByGameTitle(String gameTitle) {
-        return repository.findByGameTitleIs(gameTitle);
+        return repository.findByGameTitle(gameTitle);
     }
 }

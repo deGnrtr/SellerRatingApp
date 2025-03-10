@@ -1,11 +1,19 @@
-package com.leverx.javacourse.seller_rating_app.entity;
+package com.leverx.javacourse.seller_rating_app.entity.model;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -13,57 +21,57 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false, unique = true)
-    private int userId;
+    @Column(name = "id")
+    private int Id;
 
-    @Column(name = "login", nullable = false, unique = true)
+    @Column(name = "login")
     private String login;
 
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password")
     private int password;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "second_name", nullable = false)
+    @Column(name = "second_name")
     private String secondName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sold_by")
-    private List<Item> sellersItems;
+    private final List<Item> sellersItems = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "author_id")
-    private List<Comment> comments;
+    private final List<Comment> comments = new ArrayList<>();
 
-    @Column(name = "created", nullable = false)
-    private Date created;
+    @Column(name = "created")
+    private LocalDate created;
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "rating")
     private BigDecimal rating;
 
-    @Column(name = "user_role", nullable = false)
+    @Column(name = "user_role")
     private UserRoles userRole;
 
     public User() {
     }
 
-    public User(String login, int password, String firstName, String secondName, String email, Date created, BigDecimal rating, UserRoles userRole) {
+    public User(String login, int password, String firstName, String secondName, String email, LocalDate created, BigDecimal rating, UserRoles userRole) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
-        this.created = new Date();
+        this.created = LocalDate.now();
         this.rating = new BigDecimal(0);
         this.userRole = userRole;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return Id;
     }
 
     public String getLogin() {
@@ -106,7 +114,11 @@ public class User {
         return sellersItems;
     }
 
-    public Date getCreated() {
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public LocalDate getCreated() {
         return created;
     }
 
@@ -124,17 +136,6 @@ public class User {
 
     public void setUserRole(UserRoles userRole) {
         this.userRole = userRole;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof User user)) return false;
-        return Objects.equals(login, user.login) && Objects.equals(firstName, user.firstName) && Objects.equals(secondName, user.secondName) && Objects.equals(created, user.created) && userRole == user.userRole;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(login, firstName, secondName, created, userRole);
     }
 
     @Override
