@@ -41,11 +41,11 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sold_by")
-    private final List<Item> sellersItems = new ArrayList<>();
+    private List<Item> sellersItems = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "author_id")
-    private final List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "created")
     private LocalDate created;

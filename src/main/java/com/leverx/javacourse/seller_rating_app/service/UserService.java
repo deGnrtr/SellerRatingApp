@@ -1,6 +1,7 @@
 package com.leverx.javacourse.seller_rating_app.service;
 
 import com.leverx.javacourse.seller_rating_app.entity.model.User;
+import com.leverx.javacourse.seller_rating_app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller_rating_app.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class UserService {
     @Transactional
     public User findById(int id) {
         Optional<User> requestedUser = repository.findById(id);
-        return requestedUser.orElseThrow(RuntimeException::new);
+        return requestedUser.orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional
