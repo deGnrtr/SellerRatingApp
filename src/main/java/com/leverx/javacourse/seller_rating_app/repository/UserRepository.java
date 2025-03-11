@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-    List<User> findByOrderByRatingDesc(BigDecimal rating);
+    List<User> findByRatingOrderByRatingDesc(BigDecimal rating);
 
     @Query("SELECT u FROM User u WHERE u.rating BETWEEN :ratingStarts AND :ratingEnds ORDER BY u.rating")
     List<User> findByRatingRange(BigDecimal ratingStarts, BigDecimal ratingEnds);

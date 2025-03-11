@@ -37,7 +37,7 @@ public class UserService {
 
     @Transactional
     public List<User> getUsersByRating(BigDecimal rating) {
-        return repository.findByOrderByRatingDesc(rating);
+        return repository.findByRatingOrderByRatingDesc(rating);
     }
 
     @Transactional

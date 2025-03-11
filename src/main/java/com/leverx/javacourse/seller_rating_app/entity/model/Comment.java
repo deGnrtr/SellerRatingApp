@@ -1,6 +1,6 @@
 package com.leverx.javacourse.seller_rating_app.entity.model;
 
-
+import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

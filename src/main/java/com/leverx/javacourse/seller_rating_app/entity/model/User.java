@@ -2,6 +2,7 @@ package com.leverx.javacourse.seller_rating_app.entity.model;
 
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,27 +33,20 @@ public class User {
 
     @Column(name = "first_name")
     private String firstName;
-
     @Column(name = "second_name")
     private String secondName;
-
     @Column(name = "email")
     private String email;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sold_by")
     private List<Item> sellersItems = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "author_id")
     private List<Comment> comments = new ArrayList<>();
-
     @Column(name = "created")
     private LocalDate created;
-
     @Column(name = "rating")
     private BigDecimal rating;
-
     @Column(name = "user_role")
     private UserRoles userRole;
 
@@ -76,6 +70,10 @@ public class User {
 
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public int getPassword() {
@@ -114,12 +112,24 @@ public class User {
         return sellersItems;
     }
 
+    public void setSellersItems(List<Item> sellersItems) {
+        this.sellersItems = sellersItems;
+    }
+
     public List<Comment> getComments() {
         return comments;
     }
 
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public LocalDate getCreated() {
         return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 
     public BigDecimal getRating() {
