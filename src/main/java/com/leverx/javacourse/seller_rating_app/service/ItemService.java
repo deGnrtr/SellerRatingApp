@@ -17,7 +17,7 @@ public class ItemService {
     }
 
     @Transactional
-    public Item findById(int id) {
+    public Item findById(Long id) {
         Optional<Item> requestedItem = repository.findById(id);
         return requestedItem.orElseThrow(RuntimeException::new);
     }
@@ -28,7 +28,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 

@@ -2,6 +2,7 @@ package com.leverx.javacourse.seller_rating_app.entity.model;
 
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,11 +11,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static jakarta.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "users")
@@ -23,7 +28,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int Id;
+    private Long Id;
 
     @Column(name = "login")
     private String login;
@@ -33,21 +38,27 @@ public class User {
 
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "second_name")
     private String secondName;
+
     @Column(name = "email")
     private String email;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "sold_by")
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "seller")
     private List<Item> sellersItems = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "author_id")
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     private List<Comment> comments = new ArrayList<>();
+
     @Column(name = "created")
     private LocalDate created;
+
     @Column(name = "rating")
     private BigDecimal rating;
+
     @Column(name = "user_role")
+    @Enumerated(STRING)
     private UserRoles userRole;
 
     public User() {
@@ -64,8 +75,12 @@ public class User {
         this.userRole = userRole;
     }
 
-    public int getId() {
+    public Long getId() {
         return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
     }
 
     public String getLogin() {

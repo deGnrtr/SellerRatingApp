@@ -27,11 +27,11 @@ CREATE TABLE IF NOT EXISTS public.users
     login character varying(20) COLLATE pg_catalog."default",
 	password character varying(8) COLLATE pg_catalog."default" ,
 	first_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    last_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    email character varying(20) COLLATE pg_catalog."default" ,
+    second_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(20) COLLATE pg_catalog."default" UNIQUE ,
     created date NOT NULL,
     rating numeric(4, 1) NOT NULL,
-    user_role user_role
+    user_role character varying(20) COLLATE pg_catalog."default"
 );
 
 COMMIT;

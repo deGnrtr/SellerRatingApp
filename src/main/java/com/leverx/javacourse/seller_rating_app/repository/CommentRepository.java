@@ -3,6 +3,6 @@ package com.leverx.javacourse.seller_rating_app.repository;
 import com.leverx.javacourse.seller_rating_app.entity.model.Comment;
 import org.springframework.data.repository.CrudRepository;
 
-public interface CommentRepository extends CrudRepository<Comment, Integer> {
+public interface CommentRepository extends CrudRepository<Comment, Long> {
 
 }

@@ -16,7 +16,7 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment findById(int id) {
+    public Comment findById(Long id) {
         Optional<Comment> requestedComment = repository.findById(id);
         return requestedComment.orElseThrow(RuntimeException::new);
     }
@@ -27,7 +27,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 }
