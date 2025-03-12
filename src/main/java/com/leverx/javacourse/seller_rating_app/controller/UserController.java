@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -36,5 +39,17 @@ public class UserController {
         User newUser = userService.save(userDtoMapper.toUser(userCreateDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDtoMapper.toUserResponseDto(newUser));
 //        return ResponseEntity.status(HttpStatus.CREATED).body(userCreateDto);
+    }
+
+    @GetMapping("/users/all")
+    public ResponseEntity<List<UserResponseDto>> getAllSellersRanked(){
+        List<User> allUsers = userService.getUsersByRating();
+        return ResponseEntity.status(HttpStatus.FOUND).body(userDtoMapper.toUserResponseDtoList(allUsers));
+    }
+
+    @GetMapping("/users/all/by_game")
+    public ResponseEntity<List<UserResponseDto>> getUsersByGame(@RequestParam String gameTitle){
+        List<User> usersByGame = userService.getUsersByGame(gameTitle);
+        return ResponseEntity.status(HttpStatus.FOUND).body(userDtoMapper.toUserResponseDtoList(usersByGame));
     }
 }

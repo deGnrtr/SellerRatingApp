@@ -11,6 +11,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {LocalDate.class, BigDecimal.class},
         uses = {CommentDtoMapper.class, ItemDtoMapper.class})
@@ -21,4 +22,6 @@ public interface UserDtoMapper {
     User toUser(UserCreateDto userCreateDto);
 
     UserResponseDto toUserResponseDto(User user);
+
+    List<UserResponseDto> toUserResponseDtoList (List<User> users);
 }
