@@ -3,7 +3,10 @@ package com.leverx.javacourse.seller_rating_app.controller;
 import com.leverx.javacourse.seller_rating_app.entity.dto.UserCreateDto;
 import com.leverx.javacourse.seller_rating_app.entity.dto.UserResponseDto;
 import com.leverx.javacourse.seller_rating_app.entity.dto_mappers.UserDtoMapper;
+import com.leverx.javacourse.seller_rating_app.entity.model.Seller;
 import com.leverx.javacourse.seller_rating_app.entity.model.User;
+import com.leverx.javacourse.seller_rating_app.entity.model.UserRoles;
+import com.leverx.javacourse.seller_rating_app.entity.model.Visitor;
 import com.leverx.javacourse.seller_rating_app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -36,9 +40,14 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto){
-        User newUser = userService.save(userDtoMapper.toUser(userCreateDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDtoMapper.toUserResponseDto(newUser));
-//        return ResponseEntity.status(HttpStatus.CREATED).body(userCreateDto);
+        User user = null;
+        if (userCreateDto.getRole().equals(UserRoles.SELLER.toString())){
+            user = userService.saveSeller(userDtoMapper.toSeller(userCreateDto));
+        } else if (userCreateDto.getRole().equals(UserRoles.VISITOR.toString())) {
+            user = userService.saveVisitor(userDtoMapper.toVisitor(userCreateDto));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDtoMapper.toUserResponseDto(user));
     }
 
     @GetMapping("/users/all")
@@ -51,5 +60,11 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> getUsersByGame(@RequestParam String gameTitle){
         List<User> usersByGame = userService.getUsersByGame(gameTitle);
         return ResponseEntity.status(HttpStatus.FOUND).body(userDtoMapper.toUserResponseDtoList(usersByGame));
+    }
+
+    @GetMapping("/users/all/in_range")
+    public ResponseEntity<List<UserResponseDto>> getUsersInRatingRange(@RequestParam BigDecimal begin, @RequestParam BigDecimal end){
+        List<User> requestedUsers = userService.getUsersInRatingRange(begin, end);
+        return ResponseEntity.status(HttpStatus.FOUND).body(userDtoMapper.toUserResponseDtoList(requestedUsers));
     }
 }

@@ -2,77 +2,66 @@ package com.leverx.javacourse.seller_rating_app.entity.model;
 
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.EnumType.STRING;
-
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "users")
-public class User {
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    protected Long Id;
 
     @Column(name = "login")
-    private String login;
+    protected String login;
 
     @Column(name = "password")
-    private int password;
+    protected int password;
 
     @Column(name = "first_name")
-    private String firstName;
+    protected String firstName;
 
     @Column(name = "second_name")
-    private String secondName;
+    protected String secondName;
 
     @Column(name = "email")
-    private String email;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "seller")
-    private List<Item> sellersItems = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
-    private List<Comment> comments = new ArrayList<>();
+    protected String email;
 
     @Column(name = "created")
-    private LocalDate created;
+    protected LocalDate created;
 
-    @Column(name = "rating")
-    private BigDecimal rating;
+    protected UserRoles role;
 
-    @Column(name = "user_role")
-    @Enumerated(STRING)
-    private UserRoles userRole;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
+    protected List<Comment> ownComments = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String login, int password, String firstName, String secondName, String email, LocalDate created, BigDecimal rating, UserRoles userRole) {
+    public User(Long id, String login, int password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments, UserRoles role) {
+        Id = id;
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
-        this.created = LocalDate.now();
-        this.rating = new BigDecimal(0);
-        this.userRole = userRole;
+        this.created = created;
+        this.ownComments = ownComments;
+        this.role = role;
     }
 
     public Long getId() {
@@ -123,22 +112,6 @@ public class User {
         this.email = email;
     }
 
-    public List<Item> getSellersItems() {
-        return sellersItems;
-    }
-
-    public void setSellersItems(List<Item> sellersItems) {
-        this.sellersItems = sellersItems;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public LocalDate getCreated() {
         return created;
     }
@@ -147,24 +120,33 @@ public class User {
         this.created = created;
     }
 
-    public BigDecimal getRating() {
-        return rating;
+    public List<Comment> getOwnComments() {
+        return ownComments;
     }
 
-    public void setRating(BigDecimal rating) {
-        this.rating = rating;
+    public void setOwnComments(List<Comment> ownComments) {
+        this.ownComments = ownComments;
     }
 
-    public UserRoles getUserRole() {
-        return userRole;
+    public UserRoles getRole() {
+        return role;
     }
 
-    public void setUserRole(UserRoles userRole) {
-        this.userRole = userRole;
+    public void setRole(String role) {
+        this.role = UserRoles.valueOf(role);
     }
 
     @Override
     public String toString() {
-        return "User{" + ", firstName=" + firstName + ", login='" + login + '\'' + ", secondName=" + secondName + ", created=" + created + ", rating=" + rating + ", userRole=" + userRole + '}';
+        return "User{" +
+                "Id=" + Id +
+                ", login='" + login + '\'' +
+                ", password=" + password +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", email='" + email + '\'' +
+                ", created=" + created +
+                ", ownComments=" + ownComments +
+                '}';
     }
 }

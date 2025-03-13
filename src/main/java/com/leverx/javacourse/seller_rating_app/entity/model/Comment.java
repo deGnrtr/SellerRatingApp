@@ -37,6 +37,10 @@ public class Comment {
     @JoinColumn(name = "author")
     private User author;
 
+    @ManyToOne
+    @JoinColumn(name = "seller")
+    private User seller;
+
     public void setId(Long id) {
         Id = id;
     }
@@ -91,6 +95,14 @@ public class Comment {
 
     public void setRatingFromComment(BigDecimal rating) {
         this.ratingFromComment = rating;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 
     @Override

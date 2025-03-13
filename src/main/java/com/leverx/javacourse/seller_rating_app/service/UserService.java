@@ -2,8 +2,10 @@ package com.leverx.javacourse.seller_rating_app.service;
 
 import com.leverx.javacourse.seller_rating_app.entity.model.Comment;
 import com.leverx.javacourse.seller_rating_app.entity.model.Item;
+import com.leverx.javacourse.seller_rating_app.entity.model.Seller;
 import com.leverx.javacourse.seller_rating_app.entity.model.User;
 import com.leverx.javacourse.seller_rating_app.entity.model.UserRoles;
+import com.leverx.javacourse.seller_rating_app.entity.model.Visitor;
 import com.leverx.javacourse.seller_rating_app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller_rating_app.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -34,21 +36,20 @@ public class UserService {
     }
 
     @Transactional
-    public User save(User user) {
-        User saved = new User();
-        if (user.getUserRole().equals(UserRoles.SELLER)){
-            saved = userRepository.save(user);
-            if (saved.getComments() != null){
-                for(Comment comment: saved.getComments()){
-                    comment.setAuthor(user);
-                    commentService.save(comment);
-                }
+    public Seller saveSeller(User user) {
+        Seller saved = (Seller) userRepository.save(user);
+        if (saved.getAssignedComments() != null){
+            for(Comment comment: saved.getAssignedComments()){
+                comment.setAuthor(user);
+                commentService.save(comment);
             }
-        } else if (user.getUserRole().equals(UserRoles.SIMPLE_USER)){
-            user.getComments().clear();
-            saved = userRepository.save(user);
         }
         return saved;
+    }
+
+    @Transactional
+    public Visitor saveVisitor(User user) {
+        return (Visitor) userRepository.save(user);
     }
 
     @Transactional
@@ -71,7 +72,7 @@ public class UserService {
         List<Item> selectedItems = itemService.findByGameTitle(gameTitle);
         List<User> requestedUsers = new ArrayList<>();
         for (Item selectedItem : selectedItems) {
-            if (selectedItem.getSeller().getUserRole().equals(UserRoles.SELLER)) {
+            if (selectedItem.getSeller().getRole().equals(UserRoles.SELLER)) {
                 requestedUsers.add(findById(selectedItem.getSeller().getId()));
             }
         }

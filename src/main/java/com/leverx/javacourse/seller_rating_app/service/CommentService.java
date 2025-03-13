@@ -22,8 +22,8 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment save(Comment item) {
-        return repository.save(item);
+    public Comment save(Comment comment) {
+        return repository.save(comment);
     }
 
     @Transactional

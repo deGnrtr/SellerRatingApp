@@ -1,6 +1,5 @@
 package com.leverx.javacourse.seller_rating_app.entity.dto;
 
-import com.leverx.javacourse.seller_rating_app.entity.model.Comment;
 import com.leverx.javacourse.seller_rating_app.entity.model.UserRoles;
 
 import java.math.BigDecimal;
@@ -13,10 +12,10 @@ public class UserCreateDto {
     private String firstName;
     private String secondName;
     private String email;
-    private List<CommentCreateDto> comments;
+    private List<CommentCreateDto> assignedComments;
     private LocalDate created;
     private BigDecimal rating;
-    private UserRoles userRole;
+    private String role;
 
     public String getLogin() {
         return login;
@@ -58,12 +57,12 @@ public class UserCreateDto {
         this.email = email;
     }
 
-    public List<CommentCreateDto> getComments() {
-        return comments;
+    public List<CommentCreateDto> getAssignedComments() {
+        return assignedComments;
     }
 
-    public void setComments(List<CommentCreateDto> comments) {
-        this.comments = comments;
+    public void setAssignedComments(List<CommentCreateDto> assignedComments) {
+        this.assignedComments = assignedComments;
     }
 
     public LocalDate getCreated() {
@@ -82,11 +81,11 @@ public class UserCreateDto {
         this.rating = rating;
     }
 
-    public UserRoles getUserRole() {
-        return userRole;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserRole(UserRoles userRole) {
-        this.userRole = userRole;
+    public void setRole(String userRole) {
+        this.role = userRole;
     }
 }

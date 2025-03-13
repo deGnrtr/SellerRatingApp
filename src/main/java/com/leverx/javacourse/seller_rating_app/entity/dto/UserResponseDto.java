@@ -10,7 +10,6 @@ import java.util.List;
 public class UserResponseDto {
     private Long Id;
     private String login;
-    private int password;
     private String firstName;
     private String secondName;
     private String email;
@@ -18,7 +17,7 @@ public class UserResponseDto {
     private List<CommentResponseDto> comments = new ArrayList<>();
     private LocalDate created;
     private BigDecimal rating;
-    private UserRoles userRole;
+    private UserRoles role;
 
     public Long getId() {
         return Id;
@@ -34,14 +33,6 @@ public class UserResponseDto {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public int getPassword() {
-        return password;
-    }
-
-    public void setPassword(int password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -100,11 +91,11 @@ public class UserResponseDto {
         this.rating = rating;
     }
 
-    public UserRoles getUserRole() {
-        return userRole;
+    public UserRoles getRole() {
+        return role;
     }
 
-    public void setUserRole(UserRoles userRole) {
-        this.userRole = userRole;
+    public void setRole(UserRoles role) {
+        this.role = role;
     }
 }
