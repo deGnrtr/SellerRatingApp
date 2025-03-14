@@ -26,7 +26,13 @@ public interface UserDtoMapper {
     @Mapping(target = "created" , expression = "java(LocalDate.now())")
     Visitor toVisitor(UserCreateDto userCreateDto);
 
+    //UserResponseDto sellerToUserResponseDto(Seller user);
+
     UserResponseDto toUserResponseDto(User user);
+
+    List<UserResponseDto> sellerToUserResponseDtoList(List<Seller> users);
+
+    List<UserResponseDto> visitorToUserResponseDtoList(List<Visitor> visitors);
 
     List<UserResponseDto> toUserResponseDtoList (List<User> users);
 }

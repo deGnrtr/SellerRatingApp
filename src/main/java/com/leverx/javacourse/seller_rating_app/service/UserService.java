@@ -1,10 +1,8 @@
 package com.leverx.javacourse.seller_rating_app.service;
 
-import com.leverx.javacourse.seller_rating_app.entity.model.Comment;
 import com.leverx.javacourse.seller_rating_app.entity.model.Item;
 import com.leverx.javacourse.seller_rating_app.entity.model.Seller;
 import com.leverx.javacourse.seller_rating_app.entity.model.User;
-import com.leverx.javacourse.seller_rating_app.entity.model.UserRoles;
 import com.leverx.javacourse.seller_rating_app.entity.model.Visitor;
 import com.leverx.javacourse.seller_rating_app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller_rating_app.repository.UserRepository;
@@ -19,13 +17,15 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private CommentService commentService;
+    private UserRepository<Seller> sellerRepository;
+    private UserRepository<Visitor> visitorRepository;
+    private UserRepository<User> userRepository;
     private ItemService itemService;
 
-    public UserService(UserRepository repository, CommentService commentService, ItemService itemService) {
-        this.userRepository = repository;
-        this.commentService = commentService;
+    public UserService(UserRepository<Seller> sellerRepository, UserRepository<Visitor> visitorRepository, UserRepository<User> userRepository, ItemService itemService) {
+        this.sellerRepository = sellerRepository;
+        this.visitorRepository = visitorRepository;
+        this.userRepository = userRepository;
         this.itemService = itemService;
     }
 
@@ -36,20 +36,13 @@ public class UserService {
     }
 
     @Transactional
-    public Seller saveSeller(User user) {
-        Seller saved = (Seller) userRepository.save(user);
-        if (saved.getAssignedComments() != null){
-            for(Comment comment: saved.getAssignedComments()){
-                comment.setAuthor(user);
-                commentService.save(comment);
-            }
-        }
-        return saved;
+    public Seller saveSeller(Seller seller) {
+        return sellerRepository.save(seller);
     }
 
     @Transactional
-    public Visitor saveVisitor(User user) {
-        return (Visitor) userRepository.save(user);
+    public Visitor saveVisitor(Visitor visitor) {
+        return visitorRepository.save(visitor);
     }
 
     @Transactional
@@ -58,23 +51,21 @@ public class UserService {
     }
 
     @Transactional
-    public List<User> getUsersByRating() {
-        return userRepository.findByRatingOrderByRatingDesc();
+    public List<Seller> getSellerByRating() {
+        return sellerRepository.findAllSellersByRating();
     }
 
     @Transactional
-    public List<User> getUsersInRatingRange(BigDecimal begin, BigDecimal ends) {
-        return userRepository.findByRatingRange(begin, ends);
+    public List<Seller> getSellersInRatingRange(BigDecimal begin, BigDecimal ends) {
+        return sellerRepository.findSellerByRatingRange(begin, ends);
     }
 
     @Transactional
-    public List<User> getUsersByGame(String gameTitle){
+    public List<Seller> getSellersByGame(String gameTitle){
         List<Item> selectedItems = itemService.findByGameTitle(gameTitle);
-        List<User> requestedUsers = new ArrayList<>();
+        List<Seller> requestedUsers = new ArrayList<>();
         for (Item selectedItem : selectedItems) {
-            if (selectedItem.getSeller().getRole().equals(UserRoles.SELLER)) {
-                requestedUsers.add(findById(selectedItem.getSeller().getId()));
-            }
+            requestedUsers.add((Seller) selectedItem.getSeller());
         }
         return requestedUsers;
     }

@@ -1,6 +1,7 @@
 package com.leverx.javacourse.seller_rating_app.service;
 
 import com.leverx.javacourse.seller_rating_app.entity.model.Item;
+import com.leverx.javacourse.seller_rating_app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller_rating_app.repository.ItemRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class ItemService {
-    private ItemRepository repository;
+    private final ItemRepository repository;
 
     public ItemService(ItemRepository repository) {
         this.repository = repository;
@@ -19,7 +20,7 @@ public class ItemService {
     @Transactional
     public Item findById(Long id) {
         Optional<Item> requestedItem = repository.findById(id);
-        return requestedItem.orElseThrow(RuntimeException::new);
+        return requestedItem.orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional
@@ -35,5 +36,10 @@ public class ItemService {
     @Transactional
     public List<Item> findByGameTitle(String gameTitle) {
         return repository.findByGameTitle(gameTitle);
+    }
+
+    @Transactional
+    public List<Item> findAllItems(){
+        return (List<Item>) repository.findAll();
     }
 }
