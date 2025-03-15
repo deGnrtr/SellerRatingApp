@@ -24,17 +24,21 @@ public class Seller extends User{
     @Column(name = "rating")
     private BigDecimal rating;
 
+    @Column(name = "status")
+    private String sellerStatus;
+
     public Seller() {
-        
+
     }
     
-    public Seller(Long id, String login, int password, String firstName, String secondName, String email, LocalDate created,
-                  List<Comment> assignedComments, List<Comment> ownComments,List<Item> sellersItems, BigDecimal rating) {
+    public Seller(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created,
+                  List<Comment> assignedComments, List<Comment> ownComments, List<Item> sellersItems, BigDecimal rating, String sellerStatus) {
         super(id, login, password, firstName, secondName, email, created, ownComments, UserRoles.SELLER);
         this.Id = id;
         this.assignedComments = assignedComments;
         this.sellersItems = sellersItems;
         this.rating = rating;
+        this.sellerStatus = sellerStatus;
     }
 
     public List<Comment> getAssignedComments() {
@@ -59,6 +63,14 @@ public class Seller extends User{
 
     public void setRating(BigDecimal rating) {
         this.rating = rating;
+    }
+
+    public String getSellerStatus() {
+        return sellerStatus;
+    }
+
+    public void setSellerStatus(String sellerStatus) {
+        this.sellerStatus = sellerStatus;
     }
 
     @Override

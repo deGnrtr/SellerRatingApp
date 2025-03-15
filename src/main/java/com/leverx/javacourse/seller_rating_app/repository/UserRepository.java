@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository<T extends User> extends CrudRepository<T, Long> {
 
@@ -16,4 +17,5 @@ public interface UserRepository<T extends User> extends CrudRepository<T, Long> 
     @Query("SELECT s FROM Seller s WHERE s.rating BETWEEN :ratingStarts AND :ratingEnds ORDER BY s.rating")
     List<Seller> findSellerByRatingRange(BigDecimal ratingStarts, BigDecimal ratingEnds);
 
+    Optional<User> findByLogin(String login);
 }

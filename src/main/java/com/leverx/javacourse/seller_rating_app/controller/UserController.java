@@ -8,12 +8,9 @@ import com.leverx.javacourse.seller_rating_app.service.CommentService;
 import com.leverx.javacourse.seller_rating_app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,9 +36,9 @@ public class UserController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto){
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto, @AuthenticationPrincipal UserDetails userDetails){
         UserResponseDto responseDto = null;
-        if (userCreateDto.getRole().equals(UserRoles.SELLER.toString())){
+        if (userDetails.getAuthorities().stream().findFirst().get().toString().equals(UserRoles.SELLER.getAuthority())){
             Seller seller = userService.saveSeller(userDtoMapper.toSeller(userCreateDto));
             responseDto = userDtoMapper.toUserResponseDto(seller);
         } else if (userCreateDto.getRole().equals(UserRoles.VISITOR.toString())) {
@@ -79,5 +76,14 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> getUsersInRatingRange(@RequestParam BigDecimal begin, @RequestParam BigDecimal end){
         List<Seller> requestedUsers = userService.getSellersInRatingRange(begin, end);
         return ResponseEntity.status(HttpStatus.FOUND).body(userDtoMapper.sellerToUserResponseDtoList(requestedUsers));
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+        User user = userService.findById(id);
+        if (user.getId().equals(id)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
     }
 }

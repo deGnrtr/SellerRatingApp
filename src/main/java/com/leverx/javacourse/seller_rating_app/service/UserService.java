@@ -7,15 +7,19 @@ import com.leverx.javacourse.seller_rating_app.entity.model.Visitor;
 import com.leverx.javacourse.seller_rating_app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller_rating_app.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private UserRepository<Seller> sellerRepository;
     private UserRepository<Visitor> visitorRepository;
@@ -68,5 +72,15 @@ public class UserService {
             requestedUsers.add((Seller) selectedItem.getSeller());
         }
         return requestedUsers;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByLogin(username).map(user -> new org.springframework.security.core.userdetails.User(
+                    user.getLogin(),
+                    user.getPassword(),
+                    Collections.singleton(user.getRole())
+                ))
+                .orElseThrow(() -> new UsernameNotFoundException("Can't find specified user" + username));
     }
 }

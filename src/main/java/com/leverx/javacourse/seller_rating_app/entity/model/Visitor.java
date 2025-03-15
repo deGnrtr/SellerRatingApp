@@ -15,7 +15,7 @@ public class Visitor extends User{
     public Visitor() {
     }
 
-    public Visitor(Long id, String login, int password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments) {
+    public Visitor(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments) {
         super(id, login, password, firstName, secondName, email, created, ownComments, UserRoles.VISITOR);
     }
 

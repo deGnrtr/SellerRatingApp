@@ -51,7 +51,7 @@ public class CommentController {
         if (comment.getAuthor().getId().equals(authorId)) {
             commentService.deleteById(commentId);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/comments/{id}")

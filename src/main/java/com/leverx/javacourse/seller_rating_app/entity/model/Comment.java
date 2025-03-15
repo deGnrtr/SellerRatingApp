@@ -27,7 +27,7 @@ public class Comment {
     @Column(name = "created")
     private LocalDate created;
 
-    @Column(name = "approved")
+    @Column(name = "status")
     private String commentStatus;
 
     @Column(name = "rating")

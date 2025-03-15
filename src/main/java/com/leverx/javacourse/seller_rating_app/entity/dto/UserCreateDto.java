@@ -8,14 +8,15 @@ import java.util.List;
 
 public class UserCreateDto {
     private String login;
-    private int password;
+    private String password;
     private String firstName;
     private String secondName;
     private String email;
     private List<CommentCreateDto> assignedComments;
     private LocalDate created;
     private BigDecimal rating;
-    private String role;
+
+    private String sellerStatus;
 
     public String getLogin() {
         return login;
@@ -25,11 +26,11 @@ public class UserCreateDto {
         this.login = login;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -81,11 +82,11 @@ public class UserCreateDto {
         this.rating = rating;
     }
 
-    public String getRole() {
-        return role;
+    public String getSellerStatus() {
+        return sellerStatus;
     }
 
-    public void setRole(String userRole) {
-        this.role = userRole;
+    public void setSellerStatus(String sellerStatus) {
+        this.sellerStatus = sellerStatus;
     }
 }

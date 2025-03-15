@@ -32,7 +32,7 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(itemDtoMapper.toItemResponseDto(itemService.save(newItem)));
     }
 
-    @GetMapping("/items/{id}")
+    @GetMapping("/items/all")
     public ResponseEntity<List<ItemResponseDto>> getAllItems() {
         List<Item> items = itemService.findAllItems();
         return ResponseEntity.status(HttpStatus.FOUND).body(itemDtoMapper.toItemResponseDtoList(items));
@@ -49,7 +49,7 @@ public class ItemController {
         if (item.getSeller().getId().equals(sellerId)) {
             itemService.deleteById(itemId);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/items/{id}")

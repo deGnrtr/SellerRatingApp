@@ -1,16 +1,7 @@
 package com.leverx.javacourse.seller_rating_app.entity.model;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,7 +21,7 @@ public abstract class User {
     protected String login;
 
     @Column(name = "password")
-    protected int password;
+    protected String password;
 
     @Column(name = "first_name")
     protected String firstName;
@@ -44,6 +35,8 @@ public abstract class User {
     @Column(name = "created")
     protected LocalDate created;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     protected UserRoles role;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
@@ -52,7 +45,7 @@ public abstract class User {
     public User() {
     }
 
-    public User(Long id, String login, int password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments, UserRoles role) {
+    public User(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments, UserRoles role) {
         Id = id;
         this.login = login;
         this.password = password;
@@ -80,11 +73,11 @@ public abstract class User {
         this.login = login;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

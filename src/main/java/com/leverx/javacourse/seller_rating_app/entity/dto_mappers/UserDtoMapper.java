@@ -21,6 +21,7 @@ public interface UserDtoMapper {
 
     @Mapping(target = "created" , expression = "java(LocalDate.now())")
     @Mapping(target = "rating" , expression = "java(new BigDecimal(0))")
+    @Mapping(target = "sellerStatus" , defaultValue = "not approved")
     Seller toSeller(UserCreateDto userCreateDto);
 
     @Mapping(target = "created" , expression = "java(LocalDate.now())")
@@ -32,7 +33,4 @@ public interface UserDtoMapper {
 
     List<UserResponseDto> sellerToUserResponseDtoList(List<Seller> users);
 
-    List<UserResponseDto> visitorToUserResponseDtoList(List<Visitor> visitors);
-
-    List<UserResponseDto> toUserResponseDtoList (List<User> users);
 }

@@ -4,11 +4,12 @@ CREATE TABLE IF NOT EXISTS public.users
 (
     id serial NOT NULL PRIMARY KEY,
     login character varying(20) COLLATE pg_catalog."default",
-	password character varying(8) COLLATE pg_catalog."default" ,
+	password character varying(128) COLLATE pg_catalog."default" ,
 	first_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     second_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     email character varying(20) COLLATE pg_catalog."default" UNIQUE ,
-    created date NOT NULL
+    created date NOT NULL,
+    role character varying(20)
 );
 
 CREATE TABLE IF NOT EXISTS public.visitors
@@ -19,7 +20,8 @@ CREATE TABLE IF NOT EXISTS public.visitors
 CREATE TABLE IF NOT EXISTS public.sellers
 (
     id integer NOT NULL PRIMARY KEY CONSTRAINT "FK_users" REFERENCES public.users(id),
-    rating numeric(4, 1) NOT NULL
+    rating numeric(4, 1) NOT NULL,
+    status character varying(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.item
@@ -41,7 +43,7 @@ CREATE TABLE IF NOT EXISTS public.comment
     author integer CONSTRAINT "FK_author" REFERENCES public.users(id),
 	seller integer CONSTRAINT "FK_seller" REFERENCES public.sellers(id),
     created date NOT NULL,
-    approved character varying(20) NOT NULL
+    status character varying(20) NOT NULL
 );
 
 COMMIT;
