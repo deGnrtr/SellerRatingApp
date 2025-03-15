@@ -74,6 +74,12 @@ public class UserService implements UserDetailsService {
         return requestedUsers;
     }
 
+    @Transactional
+    public User findByLogin(String login) {
+        Optional<User> requestedUser = userRepository.findByLogin(login);
+        return requestedUser.orElseThrow(EntityNotFoundException::new);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByLogin(username).map(user -> new org.springframework.security.core.userdetails.User(

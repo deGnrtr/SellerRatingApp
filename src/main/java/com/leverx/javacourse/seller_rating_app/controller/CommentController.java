@@ -8,6 +8,10 @@ import com.leverx.javacourse.seller_rating_app.service.CommentService;
 import com.leverx.javacourse.seller_rating_app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,10 +30,10 @@ public class CommentController {
     }
 
     @PostMapping("/users/{id}/comments")
-    public ResponseEntity<CommentResponseDto> saveComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long sellerId, @RequestParam Long authorId) {
+    public ResponseEntity<CommentResponseDto> saveComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long id,@AuthenticationPrincipal(errorOnInvalidType=true) String userName) {
         Comment newComment = commentDtoMapper.toComment(commentCreateDto);
-        newComment.setSeller(userService.findById(sellerId));
-        newComment.setAuthor(userService.findById(authorId));
+        newComment.setSeller(userService.findById(id));
+        newComment.setAuthor(userService.findByLogin(userName));
         return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(commentService.save(newComment)));
     }
 

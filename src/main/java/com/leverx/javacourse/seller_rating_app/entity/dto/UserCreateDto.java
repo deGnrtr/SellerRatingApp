@@ -15,11 +15,20 @@ public class UserCreateDto {
     private List<CommentCreateDto> assignedComments;
     private LocalDate created;
     private BigDecimal rating;
+    private String role;
 
     private String sellerStatus;
 
     public String getLogin() {
         return login;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setLogin(String login) {

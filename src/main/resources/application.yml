@@ -9,6 +9,16 @@ spring:
   jpa:
     database: postgresql
     defer-datasource-initialization: true
+  security:
+    user:
+      name: Pupa
+      password: Lupa
   sql:
     init:
       mode: always
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG
