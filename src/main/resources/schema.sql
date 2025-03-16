@@ -3,7 +3,7 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS public.users
 (
     id serial NOT NULL PRIMARY KEY,
-    login character varying(20) COLLATE pg_catalog."default",
+    login character varying(20) UNIQUE COLLATE pg_catalog."default",
 	password character varying(128) COLLATE pg_catalog."default" ,
 	first_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     second_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
