@@ -7,6 +7,7 @@ import com.leverx.javacourse.seller.rating.app.entity.model.Item;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,4 +22,7 @@ public interface ItemDtoMapper {
     ItemResponseDto toItemResponseDto(Item item);
 
     List<ItemResponseDto> toItemResponseDtoList(List<Item> itemList);
+
+    @Mapping(target = "id", ignore = true)
+    Item updateItem(@MappingTarget Item comment, ItemCreateDto itemCreateDto);
 }

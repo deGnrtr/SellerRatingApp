@@ -2,31 +2,28 @@ package com.leverx.javacourse.seller.rating.app.controller;
 
 import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
+import com.leverx.javacourse.seller.rating.app.entity.model.UserRoles;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentDtoMapper;
 import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
 import com.leverx.javacourse.seller.rating.app.service.CommentService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
 
     private final CommentService commentService;
-    private final UserService userService;
     public CommentDtoMapper commentDtoMapper;
 
     public CommentController(CommentService commentService, UserService userService, CommentDtoMapper commentDtoMapper) {
         this.commentService = commentService;
-        this.userService = userService;
         this.commentDtoMapper = commentDtoMapper;
     }
 
@@ -37,22 +34,28 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId, @RequestParam Long authorId) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Comment comment = commentService.findById(commentId);
-        if (comment.getAuthor().getId().equals(authorId)) {
+        if (userDetails.getUsername().equals(comment.getAuthor().getLogin()) || userDetails.getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             commentService.deleteById(commentId);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId, @RequestBody CommentCreateDto commentCreateDto, @RequestParam Long authorId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Comment comment = commentService.findById(commentId);
-        Comment updatedComment = commentDtoMapper.toComment(commentCreateDto);
-        if (comment.getAuthor().getId().equals(authorId)){
-            updatedComment.setSeller(comment.getSeller());
-            updatedComment.setAuthor(comment.getAuthor());
+        if (userDetails.getUsername().equals(comment.getAuthor().getLogin()) || userDetails.getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))){
+            Comment updatedComment = commentDtoMapper.updateComment(comment, commentCreateDto);
             return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDto(commentService.save(updatedComment)));
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

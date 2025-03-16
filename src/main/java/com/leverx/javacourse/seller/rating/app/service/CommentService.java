@@ -4,6 +4,7 @@ import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.repository.CommentRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class CommentService {
     }
 
     @Transactional
-    public List<Comment> findAllComments(){
+    public List<Comment> findAllSellerComments(){
         return (List<Comment>) repository.findAll();
     }
 }

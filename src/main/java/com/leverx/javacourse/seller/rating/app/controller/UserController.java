@@ -4,13 +4,17 @@ import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
+import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
+import com.leverx.javacourse.seller.rating.app.mapper.CommentDtoMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserDtoMapper;
 import com.leverx.javacourse.seller.rating.app.entity.model.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.model.User;
 import com.leverx.javacourse.seller.rating.app.entity.model.UserRoles;
+import com.leverx.javacourse.seller.rating.app.service.CommentService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,11 +35,15 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final CommentService commentService;
     private final UserDtoMapper userDtoMapper;
+    private final CommentDtoMapper commentDtoMapper;
 
-    public UserController(UserService userService, UserDtoMapper userDtoMapper) {
+    public UserController(UserService userService, CommentService commentService, UserDtoMapper userDtoMapper, CommentDtoMapper commentDtoMapper) {
         this.userService = userService;
+        this.commentService = commentService;
         this.userDtoMapper = userDtoMapper;
+        this.commentDtoMapper = commentDtoMapper;
     }
 
     @GetMapping("/{id}")
@@ -46,39 +54,31 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllSellersRanked() {
-        List<Seller> allUsers = userService.getSellerByRating();
+    public ResponseEntity<List<UserResponseDto>> getAllSellers(@RequestParam(required = false) String gameTitle,
+                                                               @RequestParam(required = false) BigDecimal begin,
+                                                               @RequestParam(required = false) BigDecimal end) {
+        List<Seller> allUsers = userService.getAllSellers(gameTitle, begin, end);
         return ResponseEntity.status(HttpStatus.OK).body(userDtoMapper.sellerToUserResponseDtoList(allUsers));
     }
 
-    /*@GetMapping("/all/by_game")
-    public ResponseEntity<List<UserResponseDto>> getUsersByGame(@RequestParam String gameTitle) {
-        List<Seller> usersByGame = userService.getSellersByGame(gameTitle);
-        return ResponseEntity.status(HttpStatus.OK).body(userDtoMapper.sellerToUserResponseDtoList(usersByGame));
-    }
-
-    @GetMapping("/all/in_range")
-    public ResponseEntity<List<UserResponseDto>> getUsersInRatingRange(@RequestParam BigDecimal begin, @RequestParam BigDecimal end) {
-        List<Seller> requestedUsers = userService.getSellersInRatingRange(begin, end);
-        return ResponseEntity.status(HttpStatus.OK).body(userDtoMapper.sellerToUserResponseDtoList(requestedUsers));
-    }*/
-
     @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentResponseDto> saveComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long id) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CommentResponseDto> addComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Comment newComment = commentDtoMapper.toComment(commentCreateDto);
         newComment.setSeller(userService.findById(id));
-        newComment.setAuthor(userService.findByLogin(userDetails.getUsername()).get());
+        newComment.setAuthor(userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new));
         return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(commentService.save(newComment)));
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getAllComments() {
-        List<Comment> comments = commentService.findAllComments();
-        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDtoList(comments));
+    public ResponseEntity<List<CommentResponseDto>> getAllSellerComments(@PathVariable Long id) {
+        Seller requestedUser = (Seller) userService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDtoList(requestedUser.getAssignedComments()));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails.getUsername().equals(userService.findById(id).getLogin()) || userDetails.getAuthorities()

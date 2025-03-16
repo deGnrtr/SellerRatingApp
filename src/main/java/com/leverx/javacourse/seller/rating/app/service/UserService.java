@@ -55,23 +55,8 @@ public class UserService{
     }
 
     @Transactional
-    public List<Seller> getSellerByRating() {
-        return sellerRepository.findAllSellersByRating();
-    }
-
-    @Transactional
-    public List<Seller> getSellersInRatingRange(BigDecimal begin, BigDecimal ends) {
-        return sellerRepository.findSellerByRatingRange(begin, ends);
-    }
-
-    @Transactional
-    public List<Seller> getSellersByGame(String gameTitle){
-        List<Item> selectedItems = itemService.findByGameTitle(gameTitle);
-        List<Seller> requestedUsers = new ArrayList<>();
-        for (Item selectedItem : selectedItems) {
-            requestedUsers.add((Seller) selectedItem.getSeller());
-        }
-        return requestedUsers;
+    public List<Seller> getAllSellers (String gameTitle, BigDecimal begin, BigDecimal end){
+        return sellerRepository.findAllSellersByCriteria(gameTitle, begin, end);
     }
 
     @Transactional

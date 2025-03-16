@@ -7,6 +7,7 @@ import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,5 +26,8 @@ public interface CommentDtoMapper {
     CommentResponseDto toCommentResponseDto(Comment comment);
 
     List<CommentResponseDto> toCommentResponseDtoList(List<Comment> commentList);
+
+    @Mapping(target = "id", ignore = true)
+    Comment updateComment(@MappingTarget Comment comment, CommentCreateDto commentCreateDto);
 }
 

@@ -6,6 +6,7 @@ import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
 import com.leverx.javacourse.seller.rating.app.entity.model.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.model.User;
 import com.leverx.javacourse.seller.rating.app.entity.model.UserRoles;
+import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.mapper.UserDtoMapper;
 import com.leverx.javacourse.seller.rating.app.service.CommentService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
@@ -50,9 +51,8 @@ public class AuthenticationController {
         Seller seller = userService.saveSeller(userDtoMapper.toSeller(userCreateDto));
         Comment comment = seller.getAssignedComments().getFirst();
         comment.setSeller(seller);
-        comment.setAuthor(userService.findByLogin(userDetails.getUsername()).get());
+        comment.setAuthor(userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new));
         commentService.save(comment);
-        UserResponseDto responseDto = userDtoMapper.toUserResponseDto(userService.findById(seller.getId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDtoMapper.toUserResponseDto(seller));
     }
 }
