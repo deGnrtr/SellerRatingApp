@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/items")
 public class ItemController {
 
     private final ItemService itemService;
@@ -25,25 +26,25 @@ public class ItemController {
         this.itemDtoMapper = commentDtoMapper;
     }
 
-    @PostMapping("/items/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<ItemResponseDto> saveItem(@RequestBody ItemCreateDto itemCreateDto, @RequestParam Long sellerId) {
         Item newItem = itemDtoMapper.toItem(itemCreateDto);
         newItem.setSeller(userService.findById(sellerId));
         return ResponseEntity.status(HttpStatus.CREATED).body(itemDtoMapper.toItemResponseDto(itemService.save(newItem)));
     }
 
-    @GetMapping("/items/all")
+    @GetMapping
     public ResponseEntity<List<ItemResponseDto>> getAllItems() {
         List<Item> items = itemService.findAllItems();
-        return ResponseEntity.status(HttpStatus.FOUND).body(itemDtoMapper.toItemResponseDtoList(items));
+        return ResponseEntity.status(HttpStatus.OK).body(itemDtoMapper.toItemResponseDtoList(items));
     }
 
-    @GetMapping("/items/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ItemResponseDto> getItem(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(itemDtoMapper.toItemResponseDto(itemService.findById(id)));
+        return ResponseEntity.status(HttpStatus.OK).body(itemDtoMapper.toItemResponseDto(itemService.findById(id)));
     }
 
-    @DeleteMapping("/items/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteItem(@PathVariable Long itemId, @RequestParam Long sellerId) {
         Item item = itemService.findById(itemId);
         if (item.getSeller().getId().equals(sellerId)) {
@@ -52,12 +53,12 @@ public class ItemController {
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/items/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ItemResponseDto> updateItem(@PathVariable Long itemId, @RequestBody ItemCreateDto itemCreateDto, @RequestParam Long sellerId){
         Item item = itemService.findById(itemId);
         Item newItem = itemDtoMapper.toItem(itemCreateDto);
         if (item.getSeller().getId().equals(sellerId)){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(itemDtoMapper.toItemResponseDto(itemService.save(newItem)));
-        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.OK).body(itemDtoMapper.toItemResponseDto(itemService.save(newItem)));
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

@@ -1,4 +1,4 @@
-package com.leverx.javacourse.seller.rating.app.config;
+package com.leverx.javacourse.seller.rating.app.security;
 
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;

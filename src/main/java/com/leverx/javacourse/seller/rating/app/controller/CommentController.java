@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -29,28 +30,13 @@ public class CommentController {
         this.commentDtoMapper = commentDtoMapper;
     }
 
-    @PostMapping("/users/{id}/comments")
-    public ResponseEntity<CommentResponseDto> saveComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Comment newComment = commentDtoMapper.toComment(commentCreateDto);
-        newComment.setSeller(userService.findById(id));
-        newComment.setAuthor(userService.findByLogin(userDetails.getUsername()).get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(commentService.save(newComment)));
-    }
-
-    @GetMapping("/users/{id}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getAllComments() {
-        List<Comment> comments = commentService.findAllComments();
-        return ResponseEntity.status(HttpStatus.FOUND).body(commentDtoMapper.toCommentResponseDtoList(comments));
-    }
-
-    @GetMapping("/comments/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CommentResponseDto> getComment(@PathVariable Long id) {
         Comment comment = commentService.findById(id);
-        return ResponseEntity.status(HttpStatus.FOUND).body(commentDtoMapper.toCommentResponseDto(comment));
+        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDto(comment));
     }
 
-    @DeleteMapping("/comments/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId, @RequestParam Long authorId) {
         Comment comment = commentService.findById(commentId);
         if (comment.getAuthor().getId().equals(authorId)) {
@@ -59,14 +45,14 @@ public class CommentController {
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/comments/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId, @RequestBody CommentCreateDto commentCreateDto, @RequestParam Long authorId){
         Comment comment = commentService.findById(commentId);
         Comment updatedComment = commentDtoMapper.toComment(commentCreateDto);
         if (comment.getAuthor().getId().equals(authorId)){
             updatedComment.setSeller(comment.getSeller());
             updatedComment.setAuthor(comment.getAuthor());
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(commentDtoMapper.toCommentResponseDto(commentService.save(updatedComment)));
-        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDto(commentService.save(updatedComment)));
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
