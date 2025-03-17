@@ -4,20 +4,15 @@ import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
-import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
-import com.leverx.javacourse.seller.rating.app.mapper.CommentDtoMapper;
-import com.leverx.javacourse.seller.rating.app.mapper.UserDtoMapper;
 import com.leverx.javacourse.seller.rating.app.entity.model.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.model.User;
-import com.leverx.javacourse.seller.rating.app.entity.model.UserRoles;
+import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
+import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
 import com.leverx.javacourse.seller.rating.app.service.CommentService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,20 +31,20 @@ public class UserController {
 
     private final UserService userService;
     private final CommentService commentService;
-    private final UserDtoMapper userDtoMapper;
-    private final CommentDtoMapper commentDtoMapper;
+    private final UserMapper userMapper;
+    private final CommentMapper commentDtoMapper;
 
-    public UserController(UserService userService, CommentService commentService, UserDtoMapper userDtoMapper, CommentDtoMapper commentDtoMapper) {
+    public UserController(UserService userService, CommentService commentService, UserMapper userMapper, CommentMapper commentDtoMapper) {
         this.userService = userService;
         this.commentService = commentService;
-        this.userDtoMapper = userDtoMapper;
+        this.userMapper = userMapper;
         this.commentDtoMapper = commentDtoMapper;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         User requestedUser = userService.findById(id);
-        UserResponseDto userResponseDto = userDtoMapper.toUserResponseDto(requestedUser);
+        UserResponseDto userResponseDto = userMapper.toUserResponseDto(requestedUser);
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
     }
 
@@ -58,16 +53,14 @@ public class UserController {
                                                                @RequestParam(required = false) BigDecimal begin,
                                                                @RequestParam(required = false) BigDecimal end) {
         List<Seller> allUsers = userService.getAllSellers(gameTitle, begin, end);
-        return ResponseEntity.status(HttpStatus.OK).body(userDtoMapper.sellerToUserResponseDtoList(allUsers));
+        return ResponseEntity.status(HttpStatus.OK).body(userMapper.sellerToUserResponseDtoList(allUsers));
     }
 
     @PostMapping("/{id}/comments")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CommentResponseDto> addComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Comment newComment = commentDtoMapper.toComment(commentCreateDto);
-        newComment.setSeller(userService.findById(id));
-        newComment.setAuthor(userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new));
+        Comment Comment = commentDtoMapper.toComment(commentCreateDto);
+        Comment newComment = commentService.setComment(Comment, id);
         return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(commentService.save(newComment)));
     }
 
@@ -80,13 +73,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails.getUsername().equals(userService.findById(id).getLogin()) || userDetails.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority)
-                .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))){
-            userService.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

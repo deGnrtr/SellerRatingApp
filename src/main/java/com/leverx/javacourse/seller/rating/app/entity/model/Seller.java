@@ -22,10 +22,10 @@ public class Seller extends User{
     private List<Comment> assignedComments = new ArrayList<>();
 
     @Column(name = "rating")
-    private BigDecimal rating;
+    private BigDecimal rating = new BigDecimal(0);
 
     @Column(name = "status")
-    private String sellerStatus;
+    private String sellerStatus = "NOT_VERIFIED";
 
     public Seller() {
 
@@ -34,7 +34,7 @@ public class Seller extends User{
     public Seller(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created,
                   List<Comment> assignedComments, List<Comment> ownComments, List<Item> sellersItems, BigDecimal rating, String sellerStatus) {
         super(id, login, password, firstName, secondName, email, created, ownComments, UserRoles.SELLER);
-        this.Id = id;
+        this.id = id;
         this.assignedComments = assignedComments;
         this.sellersItems = sellersItems;
         this.rating = rating;
@@ -76,7 +76,7 @@ public class Seller extends User{
     @Override
     public String toString() {
         return "Seller{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", sellersItems=" + sellersItems +
                 ", assignedComments=" + assignedComments +
                 ", ownComments=" + ownComments +

@@ -13,16 +13,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = LocalDate.class)
-public interface ItemDtoMapper {
+public interface ItemMapper {
 
-    @Mapping(target = "created", expression = "java(LocalDate.now())")
     Item toItem(ItemCreateDto itemCreateDto);
 
-    @Mapping(target = "seller", expression = "java(item.getSeller().getId())")
+    @Mapping(target = "seller", expression = "seller.id")
     ItemResponseDto toItemResponseDto(Item item);
 
     List<ItemResponseDto> toItemResponseDtoList(List<Item> itemList);
 
     @Mapping(target = "id", ignore = true)
-    Item updateItem(@MappingTarget Item comment, ItemCreateDto itemCreateDto);
+    Item updateItem(@MappingTarget Item item, Item itemCreateDto);
 }

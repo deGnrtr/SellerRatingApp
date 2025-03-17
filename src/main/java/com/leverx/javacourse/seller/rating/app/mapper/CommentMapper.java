@@ -15,19 +15,17 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         imports = {LocalDate.class, BigDecimal.class})
-public interface CommentDtoMapper {
+public interface CommentMapper {
 
-    @Mapping(target = "commentStatus", constant = "NOT_VERIFIED")
-    @Mapping(target = "created" , expression = "java(LocalDate.now())")
     Comment toComment(CommentCreateDto commentCreateDto);
 
-    @Mapping(target = "author", expression = "java(comment.getAuthor().getId())")
-    @Mapping(target = "seller", expression = "java(comment.getSeller().getId())")
+    @Mapping(target = "author", expression = "author.id)")
+    @Mapping(target = "seller", expression = "seller.id")
     CommentResponseDto toCommentResponseDto(Comment comment);
 
     List<CommentResponseDto> toCommentResponseDtoList(List<Comment> commentList);
 
     @Mapping(target = "id", ignore = true)
-    Comment updateComment(@MappingTarget Comment comment, CommentCreateDto commentCreateDto);
+    Comment updateComment(@MappingTarget Comment comment, Comment commentCreateDto);
 }
 

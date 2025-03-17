@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 
@@ -29,10 +31,12 @@ public class Item {
     @Column(name = "game_title")
     private String gameTitle;
 
-    @Column(name = "created")
+    @CreatedDate
+    @Column(name = "created_date")
     private LocalDate created;
 
-    @Column(name = "updated")
+    @LastModifiedDate
+    @Column(name = "updated_date")
     private LocalDate updated;
 
     @ManyToOne

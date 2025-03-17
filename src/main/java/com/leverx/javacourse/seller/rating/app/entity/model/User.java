@@ -2,6 +2,7 @@ package com.leverx.javacourse.seller.rating.app.entity.model;
 
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    protected Long Id;
+    protected Long id;
 
     @Column(name = "login")
     protected String login;
@@ -32,7 +33,8 @@ public abstract class User {
     @Column(name = "email")
     protected String email;
 
-    @Column(name = "created")
+    @CreatedDate
+    @Column(name = "created_date")
     protected LocalDate created;
 
     @Column(name = "role")
@@ -46,7 +48,7 @@ public abstract class User {
     }
 
     public User(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments, UserRoles role) {
-        Id = id;
+        this.id = id;
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -58,11 +60,11 @@ public abstract class User {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getLogin() {
@@ -132,7 +134,7 @@ public abstract class User {
     @Override
     public String toString() {
         return "User{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", login='" + login + '\'' +
                 ", password=" + password +
                 ", firstName='" + firstName + '\'' +

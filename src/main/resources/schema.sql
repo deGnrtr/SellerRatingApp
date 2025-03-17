@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.users
 	first_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     second_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     email character varying(20) COLLATE pg_catalog."default" UNIQUE ,
-    created date NOT NULL,
+    created_date date NOT NULL,
     role character varying(20)
 );
 
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS public.item
     title character varying(20) COLLATE pg_catalog."default" NOT NULL,
     description text COLLATE pg_catalog."default",
     sold_by integer CONSTRAINT "FK_seller" REFERENCES public.sellers(id),
-    created date NOT NULL,
-    updated date,
+    created_date date NOT NULL,
+    updated_date date,
     game_title character varying(50) COLLATE pg_catalog."default"
 );
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.comment
     rating numeric(4, 1) NOT NULL,
     author integer CONSTRAINT "FK_author" REFERENCES public.users(id),
 	seller integer CONSTRAINT "FK_seller" REFERENCES public.sellers(id),
-    created date NOT NULL,
+    created_date date NOT NULL,
     status character varying(20) NOT NULL
 );
 

@@ -20,9 +20,9 @@ public class Visitor extends User{
     @Override
     public String toString() {
         return "Visitor{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", comments=" + ownComments +
-                ", Id=" + Id +
+                ", id=" + id +
                 ", login='" + login + '\'' +
                 ", password=" + password +
                 ", firstName='" + firstName + '\'' +

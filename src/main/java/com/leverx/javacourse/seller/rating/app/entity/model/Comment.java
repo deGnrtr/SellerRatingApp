@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,11 +25,12 @@ public class Comment {
     @Column(name = "text")
     private String commentText;
 
-    @Column(name = "created")
+    @CreatedDate
+    @Column(name = "created_date")
     private LocalDate created;
 
     @Column(name = "status")
-    private String commentStatus;
+    private String commentStatus = "NOT_VERIFIED";
 
     @Column(name = "rating")
     private BigDecimal ratingFromComment;
