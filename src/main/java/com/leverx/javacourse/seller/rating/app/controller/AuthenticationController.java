@@ -2,8 +2,8 @@ package com.leverx.javacourse.seller.rating.app.controller;
 
 import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
-import com.leverx.javacourse.seller.rating.app.entity.model.User;
+import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
 import com.leverx.javacourse.seller.rating.app.service.CommentService;

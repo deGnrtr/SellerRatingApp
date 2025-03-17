@@ -1,7 +1,7 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
-import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
-import com.leverx.javacourse.seller.rating.app.entity.model.UserRoles;
+import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.exception.UnauthorisedDataModification;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

@@ -1,4 +1,4 @@
-package com.leverx.javacourse.seller.rating.app.entity.model;
+package com.leverx.javacourse.seller.rating.app.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

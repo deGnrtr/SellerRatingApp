@@ -1,6 +1,6 @@
 package com.leverx.javacourse.seller.rating.app.repository;
 
-import com.leverx.javacourse.seller.rating.app.entity.model.User;
+import com.leverx.javacourse.seller.rating.app.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

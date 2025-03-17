@@ -3,7 +3,7 @@ package com.leverx.javacourse.seller.rating.app.controller;
 import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
-import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.Comment;
 import com.leverx.javacourse.seller.rating.app.service.CommentService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;

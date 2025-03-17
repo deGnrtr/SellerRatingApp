@@ -1,7 +1,7 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
-import com.leverx.javacourse.seller.rating.app.entity.model.Item;
-import com.leverx.javacourse.seller.rating.app.entity.model.UserRoles;
+import com.leverx.javacourse.seller.rating.app.entity.Item;
+import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.exception.UnauthorisedDataModification;
 import com.leverx.javacourse.seller.rating.app.mapper.ItemMapper;

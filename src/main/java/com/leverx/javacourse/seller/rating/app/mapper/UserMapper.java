@@ -2,8 +2,8 @@ package com.leverx.javacourse.seller.rating.app.mapper;
 
 import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.model.Seller;
-import com.leverx.javacourse.seller.rating.app.entity.model.User;
+import com.leverx.javacourse.seller.rating.app.entity.Seller;
+import com.leverx.javacourse.seller.rating.app.entity.User;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

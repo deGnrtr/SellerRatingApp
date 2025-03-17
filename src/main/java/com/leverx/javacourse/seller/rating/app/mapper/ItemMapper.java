@@ -2,7 +2,7 @@ package com.leverx.javacourse.seller.rating.app.mapper;
 
 import com.leverx.javacourse.seller.rating.app.dto.ItemCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.ItemResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.model.Item;
+import com.leverx.javacourse.seller.rating.app.entity.Item;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

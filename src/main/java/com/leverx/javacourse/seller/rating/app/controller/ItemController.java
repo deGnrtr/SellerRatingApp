@@ -4,7 +4,7 @@ import com.leverx.javacourse.seller.rating.app.dto.ItemCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.ItemResponseDto;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.mapper.ItemMapper;
-import com.leverx.javacourse.seller.rating.app.entity.model.Item;
+import com.leverx.javacourse.seller.rating.app.entity.Item;
 import com.leverx.javacourse.seller.rating.app.service.ItemService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,7 @@ package com.leverx.javacourse.seller.rating.app.mapper;
 
 import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.model.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.Comment;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
