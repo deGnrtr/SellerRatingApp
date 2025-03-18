@@ -1,7 +1,9 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
 import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
+import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.exception.UnauthorisedDataModification;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
@@ -12,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,13 +32,24 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
+    public Comment findByIdAndStatus(Long id, String status) {
+        Optional<Comment> requestedComment = repository.findByIdAndStatus(id, status);
+        return requestedComment.orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
     public Comment findById(Long id) {
         Optional<Comment> requestedComment = repository.findById(id);
         return requestedComment.orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
+    public List<Comment> findAllComments(String status) {
+        return repository.findAllCommentByStatus(status);
+    }
+
     @Transactional
-    public Comment save(Comment comment){
+    public Comment save(Comment comment) {
         return repository.save(comment);
     }
 
@@ -45,7 +60,7 @@ public class CommentService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             repository.deleteById(commentId);
-        }else throw new UnauthorisedDataModification();
+        } else throw new UnauthorisedDataModification();
     }
 
     @Transactional
@@ -66,5 +81,10 @@ public class CommentService {
             updatedComment = commentDtoMapper.updateComment(comment, newComment);
         } else throw new UnauthorisedDataModification();
         return updatedComment;
+    }
+
+    @Transactional(readOnly = true)
+    public long countSellerComments(Seller seller, BigDecimal newRating){
+        return repository.count();
     }
 }

@@ -20,7 +20,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @Column(name = "text")
     private String commentText;
@@ -30,7 +30,7 @@ public class Comment {
     private LocalDate created;
 
     @Column(name = "status")
-    private String commentStatus = "NOT_VERIFIED";
+    private String status = "NOT_VERIFIED";
 
     @Column(name = "rating")
     private BigDecimal ratingFromComment;
@@ -44,7 +44,7 @@ public class Comment {
     private User seller;
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public User getAuthor() {
@@ -57,14 +57,14 @@ public class Comment {
 
     public Comment() {
     }
-
+//TODO date
     public Comment(String commentText, LocalDate created) {
         this.commentText = commentText;
         this.created = LocalDate.now();
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public String getCommentText() {
@@ -83,12 +83,12 @@ public class Comment {
         this.created = created;
     }
 
-    public String getCommentStatus() {
-        return commentStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCommentStatus(String commentStatus) {
-        this.commentStatus = commentStatus;
+    public void setStatus(String commentStatus) {
+        this.status = status;
     }
 
     public BigDecimal getRatingFromComment() {
@@ -107,8 +107,16 @@ public class Comment {
         this.seller = seller;
     }
 
+
     @Override
     public String toString() {
-        return "Comment{" + "commentText='" + commentText + '\'' + ", created=" + created + '}';
+        return "Comment" +
+                "\n id=" + id +
+                "\n , commentText='" + commentText + '\'' +
+                "\n , created=" + created +
+                "\n , status='" + status + '\'' +
+                "\n , ratingFromComment=" + ratingFromComment +
+                "\n , author=" + author +
+                "\n , seller=" + seller;
     }
 }

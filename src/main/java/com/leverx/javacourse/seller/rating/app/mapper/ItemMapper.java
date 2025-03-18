@@ -17,7 +17,7 @@ public interface ItemMapper {
 
     Item toItem(ItemCreateDto itemCreateDto);
 
-    @Mapping(target = "seller", expression = "seller.id")
+    @Mapping(target = "seller", source = "seller.id")
     ItemResponseDto toItemResponseDto(Item item);
 
     List<ItemResponseDto> toItemResponseDtoList(List<Item> itemList);

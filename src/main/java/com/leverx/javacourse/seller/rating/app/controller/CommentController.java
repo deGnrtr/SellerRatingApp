@@ -25,7 +25,7 @@ public class CommentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CommentResponseDto> getComment(@PathVariable Long id) {
-        Comment comment = commentService.findById(id);
+        Comment comment = commentService.findByIdAndStatus(id, "VERIFIED");
         return ResponseEntity.status(HttpStatus.OK).body(commentMapper.toCommentResponseDto(comment));
     }
 

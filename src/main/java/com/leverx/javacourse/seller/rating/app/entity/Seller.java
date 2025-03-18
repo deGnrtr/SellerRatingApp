@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "sellers")
+@Table(name = "seller")
 public class Seller extends User{
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "seller")
@@ -25,20 +25,20 @@ public class Seller extends User{
     private BigDecimal rating = new BigDecimal(0);
 
     @Column(name = "status")
-    private String sellerStatus = "NOT_VERIFIED";
+    private String status = "NOT_VERIFIED";
 
     public Seller() {
 
     }
     
     public Seller(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created,
-                  List<Comment> assignedComments, List<Comment> ownComments, List<Item> sellersItems, BigDecimal rating, String sellerStatus) {
+                  List<Comment> assignedComments, List<Comment> ownComments, List<Item> sellersItems, BigDecimal rating, String status) {
         super(id, login, password, firstName, secondName, email, created, ownComments, UserRoles.SELLER);
         this.id = id;
         this.assignedComments = assignedComments;
         this.sellersItems = sellersItems;
         this.rating = rating;
-        this.sellerStatus = sellerStatus;
+        this.status = status;
     }
 
     public List<Comment> getAssignedComments() {
@@ -65,28 +65,28 @@ public class Seller extends User{
         this.rating = rating;
     }
 
-    public String getSellerStatus() {
-        return sellerStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSellerStatus(String sellerStatus) {
-        this.sellerStatus = sellerStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
 
     @Override
     public String toString() {
-        return "Seller{" +
-                "id=" + id +
-                ", sellersItems=" + sellersItems +
-                ", assignedComments=" + assignedComments +
-                ", ownComments=" + ownComments +
-                ", rating=" + rating +
-                ", login='" + login + '\'' +
-                ", password=" + password +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", email='" + email + '\'' +
-                ", created=" + created +
-                '}';
+        return "Seller" +
+                "\n sellersItems=" + sellersItems +
+                "\n , assignedComments=" + assignedComments +
+                "\n , rating=" + rating +
+                "\n , status='" + status + '\'' +
+                "\n , id=" + id +
+                "\n , login='" + login + '\'' +
+                ",\n  firstName='" + firstName + '\'' +
+                "\n , secondName='" + secondName + '\'' +
+                "\n , email='" + email + '\'' +
+                "\n , created=" + created +
+                ", ownComments=" + ownComments;
     }
 }

@@ -5,8 +5,11 @@ import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 
+import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
@@ -17,10 +20,19 @@ import java.util.List;
         uses = {CommentMapper.class, ItemMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    User toUser(UserCreateDto userCreateDto);
+    Seller toSeller(UserCreateDto userCreateDto);
+
+    Visitor toVisitor(UserCreateDto userCreateDto);
 
     UserResponseDto toUserResponseDto(User user);
 
+    List<UserResponseDto> visitorToUserResponseDtoList (List<Visitor> visitors);
+
     List<UserResponseDto> sellerToUserResponseDtoList(List<Seller> users);
 
+    @Mapping(target = "id", ignore = true)
+    Seller updateSeller(@MappingTarget Seller seller, Seller newSeller);
+
+    @Mapping(target = "id", ignore = true)
+    Visitor updateVisitor(@MappingTarget Visitor visitor, Visitor newVisitor);
 }

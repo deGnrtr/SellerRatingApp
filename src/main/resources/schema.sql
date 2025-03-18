@@ -12,12 +12,19 @@ CREATE TABLE IF NOT EXISTS public.users
     role character varying(20)
 );
 
-CREATE TABLE IF NOT EXISTS public.visitors
+CREATE TABLE IF NOT EXISTS public.visitor
 (
-    id integer NOT NULL PRIMARY KEY CONSTRAINT "FK_users" REFERENCES public.users(id)
+    id integer NOT NULL PRIMARY KEY CONSTRAINT "FK_users" REFERENCES public.users(id),
+    status character varying(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.sellers
+CREATE TABLE IF NOT EXISTS public.admin
+(
+    id integer NOT NULL PRIMARY KEY CONSTRAINT "FK_users" REFERENCES public.users(id),
+    status character varying(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.seller
 (
     id integer NOT NULL PRIMARY KEY CONSTRAINT "FK_users" REFERENCES public.users(id),
     rating numeric(4, 1) NOT NULL,
