@@ -61,18 +61,18 @@ public class CommentService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             repository.deleteById(commentId);
-        } else throw new UnauthorisedDataModification();
+        } else throw new UnauthorisedDataModification("Lack of rights.");
     }
 
     @Transactional
     public Comment setComment(Comment comment, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User seller = userService.findByIdAndStatus(id, "VERIFIED");
+        User seller = userService.findById(id);
         User author = userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new);
         if (UserRoles.SELLER.equals(seller.getRole()) && !(seller.getId().equals(author.getId()))){
             comment.setSeller(seller);
             comment.setAuthor(author);
-        }else throw new UnauthorisedDataModification();
+        }else throw new UnauthorisedDataModification("You are not allowed to comment your own profile!");
         return comment;
     }
 
@@ -85,7 +85,7 @@ public class CommentService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             updatedComment = commentDtoMapper.updateComment(comment, newComment);
-        } else throw new UnauthorisedDataModification();
+        } else throw new UnauthorisedDataModification("Lack of rights.");
         return updatedComment;
     }
 

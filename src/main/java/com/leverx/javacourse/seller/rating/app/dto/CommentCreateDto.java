@@ -1,11 +1,9 @@
 package com.leverx.javacourse.seller.rating.app.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class CommentCreateDto {
     private String commentText;
-    private LocalDate created;
     private String commentStatus;
     private BigDecimal ratingFromComment;
 
@@ -15,14 +13,6 @@ public class CommentCreateDto {
 
     public void setCommentText(String commentText) {
         this.commentText = commentText;
-    }
-
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
     }
 
     public String getCommentStatus() {

@@ -68,13 +68,13 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
     }
 
-    @DeleteMapping("/user-refuse")
+    @GetMapping("/user-refuse")
     public ResponseEntity<String> refuseUser(@RequestParam Long id){
         userService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PutMapping("/comment-verify")
+    @GetMapping("/comment-verify")
     public ResponseEntity<CommentResponseDto> verifyComment(@RequestParam Long id){
         Comment verifiedComment = commentService.updateComment(id, commentService.verifyComment(id));
         Seller targetSeller = (Seller) verifiedComment.getSeller();
@@ -82,7 +82,7 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).body(commentMapper.toCommentResponseDto(verifiedComment));
     }
 
-    @DeleteMapping("/comment-refuse")
+    @GetMapping("/comment-refuse")
     public ResponseEntity<String> refuseComment(@RequestParam Long id){
         commentService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();

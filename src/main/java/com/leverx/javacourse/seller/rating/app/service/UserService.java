@@ -67,7 +67,7 @@ public class UserService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             userRepository.deleteById(id);
-        } else throw new UnauthorisedDataModification();
+        } else throw new UnauthorisedDataModification("Lack of rights.");
     }
 
     @Transactional(readOnly = true)
@@ -97,7 +97,7 @@ public class UserService {
             }else if (newUser instanceof Visitor){
                 updatedUser = userMapper.updateVisitor(visitorRepository.findById(userId).get(), (Visitor) newUser);
             }
-        }else throw new UnauthorisedDataModification();
+        }else throw new UnauthorisedDataModification("Lack of rights.");
         return updatedUser;
     }
 

@@ -1,12 +1,9 @@
 package com.leverx.javacourse.seller.rating.app.dto;
 
-import java.time.LocalDate;
-
 public class ItemCreateDto {
     private String title;
     private String description;
     private String gameTitle;
-    private LocalDate created;
 
     public String getTitle() {
         return title;
@@ -32,11 +29,4 @@ public class ItemCreateDto {
         this.gameTitle = gameTitle;
     }
 
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
-    }
 }

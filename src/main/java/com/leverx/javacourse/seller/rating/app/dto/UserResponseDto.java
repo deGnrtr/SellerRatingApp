@@ -16,7 +16,7 @@ public class UserResponseDto {
     private List<CommentResponseDto> assignedComments = new ArrayList<>();
     private LocalDate created;
     private BigDecimal rating;
-    private String sellerStatus;
+    private String status;
     private String role;
 
     public Long getId() {
@@ -99,12 +99,12 @@ public class UserResponseDto {
         this.rating = rating;
     }
 
-    public String getSellerStatus() {
-        return sellerStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSellerStatus(String sellerStatus) {
-        this.sellerStatus = sellerStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getRole() {

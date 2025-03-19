@@ -14,6 +14,8 @@ import com.leverx.javacourse.seller.rating.app.service.EmailService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,18 +30,20 @@ public class AuthenticationController {
     private final UserMapper userMapper;
     private final CommentMapper commentMapper;
     private final EmailService emailService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-
-    public AuthenticationController(UserService userService, CommentService commentService, UserMapper userMapper, CommentMapper commentMapper, EmailService emailService) {
+    public AuthenticationController(UserService userService, CommentService commentService, UserMapper userMapper, CommentMapper commentMapper, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.commentService = commentService;
         this.userMapper = userMapper;
         this.commentMapper = commentMapper;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto) {
+        userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
         User newUser = userService.createUser(userCreateDto);
         emailService.notifyAdmin("Registration request", String.format("New user \n %s", newUser));
         UserResponseDto responseDto = null;
@@ -50,6 +54,7 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/register_anon")
     public ResponseEntity<UserResponseDto> createAnonymousSeller(@RequestBody UserCreateDto userCreateDto) {
         User newUser = userService.createUser(userCreateDto);

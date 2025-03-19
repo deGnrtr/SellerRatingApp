@@ -34,7 +34,7 @@ public class ItemService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             updatedItem = itemMapper.updateItem(item, newItem);
-        }else throw new UnauthorisedDataModification();
+        }else throw new UnauthorisedDataModification("Lack of rights.");
         return updatedItem;
     }
 
@@ -57,7 +57,7 @@ public class ItemService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))){
             repository.deleteById(id);
-        } else throw new UnauthorisedDataModification();
+        } else throw new UnauthorisedDataModification("Lack of rights.");
         repository.deleteById(id);
     }
 
