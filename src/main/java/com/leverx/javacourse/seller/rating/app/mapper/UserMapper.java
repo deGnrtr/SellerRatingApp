@@ -24,7 +24,9 @@ public interface UserMapper {
 
     Visitor toVisitor(UserCreateDto userCreateDto);
 
-    UserResponseDto toUserResponseDto(User user);
+    UserResponseDto sellerToUserResponseDto(Seller user);
+
+    UserResponseDto visitorToUserResponseDto(Visitor user);
 
     List<UserResponseDto> visitorToUserResponseDtoList (List<Visitor> visitors);
 

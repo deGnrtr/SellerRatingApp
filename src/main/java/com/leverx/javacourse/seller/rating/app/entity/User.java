@@ -1,7 +1,18 @@
 package com.leverx.javacourse.seller.rating.app.entity;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
@@ -44,10 +55,14 @@ public abstract class User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     protected List<Comment> ownComments = new ArrayList<>();
 
+    @Column(name = "status")
+    protected String status = "NOT_VERIFIED";
+
     public User() {
     }
 
-    public User(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments, UserRoles role) {
+    public User(Long id, String login, String password, String firstName, String secondName, String email
+            , LocalDate created, UserRoles role, List<Comment> ownComments, String status) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -55,8 +70,9 @@ public abstract class User {
         this.secondName = secondName;
         this.email = email;
         this.created = created;
-        this.ownComments = ownComments;
         this.role = role;
+        this.ownComments = ownComments;
+        this.status = status;
     }
 
     public Long getId() {
@@ -131,17 +147,11 @@ public abstract class User {
         this.role = UserRoles.valueOf(role);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password=" + password +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", email='" + email + '\'' +
-                ", created=" + created +
-                ", ownComments=" + ownComments +
-                '}';
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

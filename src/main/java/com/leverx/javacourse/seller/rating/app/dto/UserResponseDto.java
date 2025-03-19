@@ -17,6 +17,7 @@ public class UserResponseDto {
     private LocalDate created;
     private BigDecimal rating;
     private String sellerStatus;
+    private String role;
 
     public Long getId() {
         return Id;
@@ -104,5 +105,13 @@ public class UserResponseDto {
 
     public void setSellerStatus(String sellerStatus) {
         this.sellerStatus = sellerStatus;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

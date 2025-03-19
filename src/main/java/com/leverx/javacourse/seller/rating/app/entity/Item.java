@@ -46,9 +46,14 @@ public class Item {
     public Item() {
     }
 
-    public Item(String title) {
+    public Item(Long id, String title, String description, String gameTitle, LocalDate created, LocalDate updated, User seller) {
+        this.id = id;
         this.title = title;
-        this.created = LocalDate.now();
+        this.description = description;
+        this.gameTitle = gameTitle;
+        this.created = created;
+        this.updated = updated;
+        this.seller = seller;
     }
 
     public User getSeller() {

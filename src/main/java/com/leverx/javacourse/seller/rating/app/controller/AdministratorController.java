@@ -5,6 +5,7 @@ import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.Comment;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
+import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
@@ -40,10 +41,10 @@ public class AdministratorController {
     @GetMapping("/all-unverified-users")
     public ResponseEntity<List<UserResponseDto>> getAllUnverifiedUsers(@RequestParam String role) {
         List<UserResponseDto> responseDtoList = null;
-        if (role.equals("SELLER")) {
+        if (role.equals("seller")) {
             List<Seller> requestedSellers = userService.getAllSellers(null, null, null, "NOT_VERIFIED");
             responseDtoList = userMapper.sellerToUserResponseDtoList(requestedSellers);
-        } else if (role.equals("VISITOR")) {
+        } else if (role.equals("visitor")) {
             List<Visitor> requestedVisitors = userService.getAllVisitors("NOT_VERIFIED");
             responseDtoList = userMapper.visitorToUserResponseDtoList(requestedVisitors);
         }
@@ -55,10 +56,16 @@ public class AdministratorController {
         List<Comment> requestedComments = commentService.findAllComments("NOT_VERIFIED");
         return ResponseEntity.status(HttpStatus.OK).body(commentMapper.toCommentResponseDtoList(requestedComments));
     }
-    @PutMapping("/user-verify")
+
+    @GetMapping("/user-verify")
     public ResponseEntity<UserResponseDto> verifyUser(@RequestParam Long id){
-        User updatedUser = userService.updateUser(id, userService.findById(id));
-        return ResponseEntity.status(HttpStatus.OK).body(userMapper.toUserResponseDto(updatedUser));
+        UserResponseDto userResponseDto = null;
+        User updatedUser = userService.updateUser(id, userService.verifyUser(id));
+        if (UserRoles.SELLER.equals(updatedUser.getRole())){
+            userResponseDto = userMapper.sellerToUserResponseDto((Seller) updatedUser);
+        }else if (UserRoles.VISITOR.equals(updatedUser.getRole())){
+            userResponseDto = userMapper.visitorToUserResponseDto((Visitor) updatedUser);}
+        return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
     }
 
     @DeleteMapping("/user-refuse")
@@ -69,7 +76,7 @@ public class AdministratorController {
 
     @PutMapping("/comment-verify")
     public ResponseEntity<CommentResponseDto> verifyComment(@RequestParam Long id){
-        Comment verifiedComment = commentService.updateComment(id, commentService.findById(id));
+        Comment verifiedComment = commentService.updateComment(id, commentService.verifyComment(id));
         Seller targetSeller = (Seller) verifiedComment.getSeller();
         userService.updateRating(targetSeller, verifiedComment.getRatingFromComment());
         return ResponseEntity.status(HttpStatus.OK).body(commentMapper.toCommentResponseDto(verifiedComment));

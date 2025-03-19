@@ -57,10 +57,15 @@ public class Comment {
 
     public Comment() {
     }
-//TODO date
-    public Comment(String commentText, LocalDate created) {
+
+    public Comment(Long id, String commentText, LocalDate created, String status, BigDecimal ratingFromComment, User author, User seller) {
+        this.id = id;
         this.commentText = commentText;
-        this.created = LocalDate.now();
+        this.created = created;
+        this.status = status;
+        this.ratingFromComment = ratingFromComment;
+        this.author = author;
+        this.seller = seller;
     }
 
     public Long getId() {

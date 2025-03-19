@@ -13,16 +13,16 @@ public class Administrator extends User{
     public Administrator() {
     }
 
-    public Administrator(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments) {
-        super(id, login, password, firstName, secondName, email, created, ownComments, UserRoles.ADMINISTRATOR);
+    public Administrator(Long id, String login, String password, String firstName, String secondName, String email
+            , LocalDate created, UserRoles role, List<Comment> ownComments, String status) {
+        super(id, login, password, firstName, secondName, email, created, UserRoles.ADMINISTRATOR, ownComments, "ACTIVE");
     }
 
     @Override
     public String toString() {
-        return "Administrator{" +
+        return "Administrator" +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+                ", email='" + email + '\'';
     }
 }

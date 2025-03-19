@@ -1,6 +1,5 @@
 package com.leverx.javacourse.seller.rating.app.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -11,22 +10,17 @@ import java.util.List;
 @Table(name = "visitor")
 public class Visitor extends User{
 
-    @Column(name = "status")
-    private String status = "NOT_VERIFIED";
-
     public Visitor() {
     }
 
-    public Visitor(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created, List<Comment> ownComments, UserRoles role, String status) {
-        super(id, login, password, firstName, secondName, email, created, ownComments, role);
-        this.status = status;
+    public Visitor(Long id, String login, String password, String firstName, String secondName, String email
+            , LocalDate created, UserRoles role, List<Comment> ownComments, String status) {
+        super(id, login, password, firstName, secondName, email, created, UserRoles.VISITOR, ownComments, status);
     }
-
 
     @Override
     public String toString() {
         return "Visitor" +
-                "\n status='" + status + '\'' +
                 "\n , id=" + id +
                 "\n , login='" + login + '\'' +
                 "\n , firstName='" + firstName + '\'' +

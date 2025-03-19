@@ -18,7 +18,6 @@ import java.util.Optional;
 @Service
 public class ItemService {
     private final ItemRepository repository;
-    private final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     private final ItemMapper itemMapper;
 
     public ItemService(ItemRepository repository, ItemMapper itemMapper) {
@@ -28,6 +27,7 @@ public class ItemService {
 
     @Transactional
     public Item updateItem(Long itemId, Item newItem) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Item item = findById(itemId);
         Item updatedItem = null;
         if (userDetails.getUsername().equals(item.getSeller().getLogin()) || userDetails.getAuthorities()
@@ -51,6 +51,7 @@ public class ItemService {
 
     @Transactional
     public void deleteById(Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Item item = findById(id);
         if (userDetails.getUsername().equals(item.getSeller().getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)

@@ -24,21 +24,17 @@ public class Seller extends User{
     @Column(name = "rating")
     private BigDecimal rating = new BigDecimal(0);
 
-    @Column(name = "status")
-    private String status = "NOT_VERIFIED";
-
     public Seller() {
 
     }
-    
-    public Seller(Long id, String login, String password, String firstName, String secondName, String email, LocalDate created,
-                  List<Comment> assignedComments, List<Comment> ownComments, List<Item> sellersItems, BigDecimal rating, String status) {
-        super(id, login, password, firstName, secondName, email, created, ownComments, UserRoles.SELLER);
-        this.id = id;
-        this.assignedComments = assignedComments;
+
+    public Seller(Long id, String login, String password, String firstName, String secondName, String email
+            , LocalDate created, UserRoles role, List<Comment> ownComments, String status, List<Item> sellersItems
+            , List<Comment> assignedComments, BigDecimal rating) {
+        super(id, login, password, firstName, secondName, email, created, role, ownComments, status);
         this.sellersItems = sellersItems;
+        this.assignedComments = assignedComments;
         this.rating = rating;
-        this.status = status;
     }
 
     public List<Comment> getAssignedComments() {
@@ -65,14 +61,6 @@ public class Seller extends User{
         this.rating = rating;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
 
     @Override
     public String toString() {
@@ -80,7 +68,6 @@ public class Seller extends User{
                 "\n sellersItems=" + sellersItems +
                 "\n , assignedComments=" + assignedComments +
                 "\n , rating=" + rating +
-                "\n , status='" + status + '\'' +
                 "\n , id=" + id +
                 "\n , login='" + login + '\'' +
                 ",\n  firstName='" + firstName + '\'' +

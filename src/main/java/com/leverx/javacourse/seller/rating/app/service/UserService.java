@@ -1,5 +1,7 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
+import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
+import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
@@ -27,7 +29,6 @@ public class UserService {
     private final VisitorRepository visitorRepository;
     private final UserRepository<User> userRepository;
     private final UserMapper userMapper;
-    private final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     public UserService(SellerRepository sellerRepository, VisitorRepository visitorRepository, UserRepository<User> userRepository, ItemService itemService, UserMapper userMapper) {
         this.sellerRepository = sellerRepository;
@@ -49,18 +50,19 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(User newUser) {
+    public User createUser(UserCreateDto newUser) {
         User createdUser = null;
-        if (UserRoles.SELLER.toString().equals(newUser.getRole().toString())) {
-            createdUser = sellerRepository.save((Seller) newUser);
-        } else if (UserRoles.VISITOR.toString().equals(newUser.getRole().toString())) {
-            createdUser = visitorRepository.save((Visitor) newUser);
+        if ("SELLER".equals(newUser.getRole())) {
+            createdUser = sellerRepository.save(userMapper.toSeller(newUser));
+        } else if ("VISITOR".equals(newUser.getRole())) {
+            createdUser = visitorRepository.save(userMapper.toVisitor(newUser));
         }
         return createdUser;
     }
 
     @Transactional
     public void deleteById(Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails.getUsername().equals(findById(id).getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
@@ -75,35 +77,41 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<Visitor> getAllVisitors(String status) {
-        return visitorRepository.findAllVisitorByStatus(status);
+        return visitorRepository.findAllByStatus(status);
     }
 
     @Transactional(readOnly = true)
     public Optional<User> findByLogin(String login) {
-
         return userRepository.findByLogin(login);
     }
 
     @Transactional
     public User updateUser(Long userId, User newUser) {
-        User user = findById(userId);
         User updatedUser = null;
-        if (userDetails.getUsername().equals(user.getLogin()) || userDetails.getAuthorities()
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDetails.getUsername().equals(newUser.getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
-            if (user instanceof Seller){
-                updatedUser = userMapper.updateSeller((Seller) user, (Seller) newUser);
-            }else if (user instanceof Visitor){
-                updatedUser = userMapper.updateVisitor((Visitor) user, (Visitor) newUser);
+            if (newUser instanceof Seller){
+                updatedUser = userMapper.updateSeller(sellerRepository.findById(userId).get(), (Seller) newUser);
+            }else if (newUser instanceof Visitor){
+                updatedUser = userMapper.updateVisitor(visitorRepository.findById(userId).get(), (Visitor) newUser);
             }
         }else throw new UnauthorisedDataModification();
         return updatedUser;
     }
 
     @Transactional
-    public User updateRating(Seller seller, BigDecimal newRating){
+    public void updateRating(Seller seller, BigDecimal newRating){
         BigDecimal updatedRating = seller.getRating().add(newRating).divide(new BigDecimal(seller.getAssignedComments().size()));
         seller.setRating(updatedRating);
-        return updateUser(seller.getId(), seller);
+        updateUser(seller.getId(), seller);
+    }
+
+    @Transactional
+    public User verifyUser(Long id){
+        User targetUser = findByIdAndStatus(id, "NOT_VERIFIED");
+        targetUser.setStatus("VERIFIED");
+        return targetUser;
     }
 }

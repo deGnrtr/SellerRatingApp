@@ -7,6 +7,7 @@ import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.Comment;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
+import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
 import com.leverx.javacourse.seller.rating.app.service.CommentService;
@@ -49,7 +50,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         User requestedUser = userService.findByIdAndStatus(id, "VERIFIED");
-        UserResponseDto userResponseDto = userMapper.toUserResponseDto(requestedUser);
+        UserResponseDto userResponseDto = null;
+        if (requestedUser instanceof Seller){
+            userResponseDto = userMapper.sellerToUserResponseDto((Seller) requestedUser);
+        }else if (requestedUser instanceof Visitor){
+            userResponseDto = userMapper.visitorToUserResponseDto((Visitor) requestedUser);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
     }
 
@@ -88,13 +94,14 @@ public class UserController {
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long userId, @RequestBody UserCreateDto userCreateDto) {
-        User updatedUser = null;
+        UserResponseDto userResponseDto = null;
         if (userCreateDto.getRole().equals("SELLER")){
-            updatedUser = userMapper.toSeller(userCreateDto);
+            userResponseDto = userMapper.sellerToUserResponseDto((Seller) userService.updateUser(userId, userMapper
+                    .toSeller(userCreateDto)));
         }else if (userCreateDto.getRole().equals("VISITOR")){
-            updatedUser = userMapper.toVisitor(userCreateDto);
+            userResponseDto = userMapper.visitorToUserResponseDto((Visitor) userService.updateUser(userId, userMapper
+                    .toVisitor(userCreateDto)));
         }
-        User newUser = userService.updateUser(userId, updatedUser);
-        return ResponseEntity.status(HttpStatus.OK).body(userMapper.toUserResponseDto(newUser));
+        return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
     }
 }

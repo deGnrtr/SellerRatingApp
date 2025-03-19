@@ -7,6 +7,6 @@ import java.util.List;
 public interface VisitorRepository extends UserRepository<Visitor> {
 
     //@Query("FROM Visitor v WHERE v.status = :status")
-    List<Visitor> findAllVisitorByStatus(String status);
+    List<Visitor> findAllByStatus(String status);
 
 }

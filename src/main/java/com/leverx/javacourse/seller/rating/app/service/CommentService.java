@@ -2,6 +2,7 @@ package com.leverx.javacourse.seller.rating.app.service;
 
 import com.leverx.javacourse.seller.rating.app.entity.Comment;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
+import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
@@ -23,7 +24,6 @@ public class CommentService {
     private final CommentRepository repository;
     private final UserService userService;
     private final CommentMapper commentDtoMapper;
-    private final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     public CommentService(CommentRepository repository, UserService userService, CommentMapper commentDtoMapper) {
         this.repository = repository;
@@ -55,6 +55,7 @@ public class CommentService {
 
     @Transactional
     public void deleteById(Long commentId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Comment comment = findById(commentId);
         if (userDetails.getUsername().equals(comment.getAuthor().getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
@@ -66,13 +67,18 @@ public class CommentService {
     @Transactional
     public Comment setComment(Comment comment, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        comment.setSeller(userService.findById(id));
-        comment.setAuthor(userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new));
+        User seller = userService.findByIdAndStatus(id, "VERIFIED");
+        User author = userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new);
+        if (UserRoles.SELLER.equals(seller.getRole()) && !(seller.getId().equals(author.getId()))){
+            comment.setSeller(seller);
+            comment.setAuthor(author);
+        }else throw new UnauthorisedDataModification();
         return comment;
     }
 
     @Transactional
     public Comment updateComment(Long commentId, Comment newComment) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Comment comment = findById(commentId);
         Comment updatedComment = null;
         if (userDetails.getUsername().equals(comment.getAuthor().getLogin()) || userDetails.getAuthorities()
@@ -83,8 +89,11 @@ public class CommentService {
         return updatedComment;
     }
 
-    @Transactional(readOnly = true)
-    public long countSellerComments(Seller seller, BigDecimal newRating){
-        return repository.count();
+    @Transactional
+    public Comment verifyComment(Long id){
+        Comment targetComment = findByIdAndStatus(id, "NOT_VERIFIED");
+        targetComment.setStatus("VERIFIED");
+        return targetComment;
     }
+
 }
