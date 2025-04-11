@@ -1,21 +1,19 @@
 package com.leverx.javacourse.seller.rating.app.controller;
 
-import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
+import com.leverx.javacourse.seller.rating.app.dto.ReviewResponseDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.Review;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
-import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
+import com.leverx.javacourse.seller.rating.app.mapper.ReviewMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
-import com.leverx.javacourse.seller.rating.app.service.CommentService;
+import com.leverx.javacourse.seller.rating.app.service.ReviewService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,15 +25,15 @@ import java.util.List;
 public class AdministratorController {
 
     private final UserService userService;
-    private final CommentService commentService;
+    private final ReviewService reviewService;
     private final UserMapper userMapper;
-    private final CommentMapper commentMapper;
+    private final ReviewMapper reviewMapper;
 
-    public AdministratorController(UserService userService, CommentService commentService, UserMapper userMapper, CommentMapper commentMapper) {
+    public AdministratorController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper) {
         this.userService = userService;
-        this.commentService = commentService;
+        this.reviewService = reviewService;
         this.userMapper = userMapper;
-        this.commentMapper = commentMapper;
+        this.reviewMapper = reviewMapper;
     }
 
     @GetMapping("/all-unverified-users")
@@ -52,9 +50,9 @@ public class AdministratorController {
     }
 
     @GetMapping("/all-unverified-comments")
-    public ResponseEntity<List<CommentResponseDto>> getAllUnverifiedComments() {
-        List<Comment> requestedComments = commentService.findAllComments("NOT_VERIFIED");
-        return ResponseEntity.status(HttpStatus.OK).body(commentMapper.toCommentResponseDtoList(requestedComments));
+    public ResponseEntity<List<ReviewResponseDto>> getAllUnverifiedComments() {
+        List<Review> requestedReviews = reviewService.findAllComments("NOT_VERIFIED");
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toCommentResponseDtoList(requestedReviews));
     }
 
     @GetMapping("/user-verify")
@@ -74,17 +72,17 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/comment-verify")
-    public ResponseEntity<CommentResponseDto> verifyComment(@RequestParam Long id){
-        Comment verifiedComment = commentService.updateComment(id, commentService.verifyComment(id));
-        Seller targetSeller = (Seller) verifiedComment.getSeller();
-        userService.updateRating(targetSeller, verifiedComment.getRatingFromComment());
-        return ResponseEntity.status(HttpStatus.OK).body(commentMapper.toCommentResponseDto(verifiedComment));
+    @GetMapping("/review-verify")
+    public ResponseEntity<ReviewResponseDto> verifyComment(@RequestParam Long id){
+        Review verifiedReview = reviewService.updateComment(id, reviewService.verifyComment(id));
+        Seller targetSeller = (Seller) verifiedReview.getSeller();
+        userService.updateRating(targetSeller, verifiedReview.getRatingFromReview());
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toCommentResponseDto(verifiedReview));
     }
 
-    @GetMapping("/comment-refuse")
+    @GetMapping("/review-refuse")
     public ResponseEntity<String> refuseComment(@RequestParam Long id){
-        commentService.deleteById(id);
+        reviewService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

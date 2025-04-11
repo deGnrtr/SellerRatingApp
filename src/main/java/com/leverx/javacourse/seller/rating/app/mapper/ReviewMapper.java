@@ -1,8 +1,8 @@
 package com.leverx.javacourse.seller.rating.app.mapper;
 
-import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
-import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.dto.ReviewCreateDto;
+import com.leverx.javacourse.seller.rating.app.dto.ReviewResponseDto;
+import com.leverx.javacourse.seller.rating.app.entity.Review;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,17 +15,17 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         imports = {LocalDate.class, BigDecimal.class})
-public interface CommentMapper {
+public interface ReviewMapper {
 
-    Comment toComment(CommentCreateDto commentCreateDto);
+    Review toComment(ReviewCreateDto reviewCreateDto);
 
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "seller", source = "seller.id")
-    CommentResponseDto toCommentResponseDto(Comment comment);
+    ReviewResponseDto toCommentResponseDto(Review review);
 
-    List<CommentResponseDto> toCommentResponseDtoList(List<Comment> commentList);
+    List<ReviewResponseDto> toCommentResponseDtoList(List<Review> reviewList);
 
     @Mapping(target = "id", ignore = true)
-    Comment updateComment(@MappingTarget Comment comment, Comment commentCreateDto);
+    Review updateComment(@MappingTarget Review review, Review reviewCreateDto);
 }
 

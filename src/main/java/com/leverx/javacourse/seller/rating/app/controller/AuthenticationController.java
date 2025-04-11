@@ -2,14 +2,14 @@ package com.leverx.javacourse.seller.rating.app.controller;
 
 import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.Review;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
-import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
+import com.leverx.javacourse.seller.rating.app.mapper.ReviewMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
-import com.leverx.javacourse.seller.rating.app.service.CommentService;
+import com.leverx.javacourse.seller.rating.app.service.ReviewService;
 import com.leverx.javacourse.seller.rating.app.service.EmailService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -26,17 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private final UserService userService;
-    private final CommentService commentService;
+    private final ReviewService reviewService;
     private final UserMapper userMapper;
-    private final CommentMapper commentMapper;
+    private final ReviewMapper reviewMapper;
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthenticationController(UserService userService, CommentService commentService, UserMapper userMapper, CommentMapper commentMapper, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
+    public AuthenticationController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.commentService = commentService;
+        this.reviewService = reviewService;
         this.userMapper = userMapper;
-        this.commentMapper = commentMapper;
+        this.reviewMapper = reviewMapper;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -58,11 +58,11 @@ public class AuthenticationController {
     @PostMapping("/register_anon")
     public ResponseEntity<UserResponseDto> createAnonymousSeller(@RequestBody UserCreateDto userCreateDto) {
         User newUser = userService.createUser(userCreateDto);
-        Comment comment = commentService.setComment(commentMapper.toComment(userCreateDto.getAssignedComments().getFirst())
+        Review review = reviewService.setComment(reviewMapper.toComment(userCreateDto.getAssignedComments().getFirst())
                 , newUser.getId());
-        Comment newComment = commentService.save(comment);
-        emailService.notifyAdmin("Registration request", String.format("New user \n %s \n with comment %s"
-                , newUser, newComment));
+        Review newReview = reviewService.save(review);
+        emailService.notifyAdmin("Registration request", String.format("New user \n %s \n with review %s"
+                , newUser, newReview));
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.sellerToUserResponseDto((Seller) newUser));
     }
 }

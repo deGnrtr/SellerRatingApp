@@ -14,8 +14,8 @@ public class Visitor extends User{
     }
 
     public Visitor(Long id, String login, String password, String firstName, String secondName, String email
-            , LocalDate created, UserRoles role, List<Comment> ownComments, String status) {
-        super(id, login, password, firstName, secondName, email, created, UserRoles.VISITOR, ownComments, status);
+            , LocalDate created, UserRoles role, List<Review> ownReviews, String status) {
+        super(id, login, password, firstName, secondName, email, created, UserRoles.VISITOR, ownReviews, status);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class Visitor extends User{
                 "\n , secondName='" + secondName + '\'' +
                 "\n , email='" + email + '\'' +
                 "\n , created=" + created +
-                "\n , ownComments=" + ownComments;
+                "\n , ownComments=" + ownReviews;
     }
 }

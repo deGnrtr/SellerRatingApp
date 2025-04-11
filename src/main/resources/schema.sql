@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS public.users
 	password character varying(128) COLLATE pg_catalog."default" ,
 	first_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     second_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    email character varying(20) COLLATE pg_catalog."default" UNIQUE ,
+    email character varying(50) COLLATE pg_catalog."default" UNIQUE ,
     created_date date,
     role character varying(20),
     status character varying(50) NOT NULL
@@ -26,13 +26,13 @@ CREATE TABLE IF NOT EXISTS public.administrator
 CREATE TABLE IF NOT EXISTS public.seller
 (
     id integer NOT NULL PRIMARY KEY CONSTRAINT "FK_users" REFERENCES public.users(id),
-    rating numeric(4, 1) NOT NULL
+    rating numeric(4, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.item
 (
     id serial NOT NULL PRIMARY KEY,
-    title character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    title character varying(70) COLLATE pg_catalog."default" NOT NULL,
     description text COLLATE pg_catalog."default",
     sold_by integer CONSTRAINT "FK_seller" REFERENCES public.seller(id),
     created_date date,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.item
     game_title character varying(50) COLLATE pg_catalog."default"
 );
 
-CREATE TABLE IF NOT EXISTS public.comment
+CREATE TABLE IF NOT EXISTS public.review
 (
     id serial NOT NULL PRIMARY KEY,
     text text COLLATE pg_catalog."default" NOT NULL,

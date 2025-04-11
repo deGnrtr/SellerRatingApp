@@ -53,7 +53,7 @@ public abstract class User {
     protected UserRoles role;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
-    protected List<Comment> ownComments = new ArrayList<>();
+    protected List<Review> ownReviews = new ArrayList<>();
 
     @Column(name = "status")
     protected String status = "NOT_VERIFIED";
@@ -62,7 +62,7 @@ public abstract class User {
     }
 
     public User(Long id, String login, String password, String firstName, String secondName, String email
-            , LocalDate created, UserRoles role, List<Comment> ownComments, String status) {
+            , LocalDate created, UserRoles role, List<Review> ownReviews, String status) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -71,7 +71,7 @@ public abstract class User {
         this.email = email;
         this.created = created;
         this.role = role;
-        this.ownComments = ownComments;
+        this.ownReviews = ownReviews;
         this.status = status;
     }
 
@@ -131,12 +131,12 @@ public abstract class User {
         this.created = created;
     }
 
-    public List<Comment> getOwnComments() {
-        return ownComments;
+    public List<Review> getOwnComments() {
+        return ownReviews;
     }
 
-    public void setOwnComments(List<Comment> ownComments) {
-        this.ownComments = ownComments;
+    public void setOwnComments(List<Review> ownReviews) {
+        this.ownReviews = ownReviews;
     }
 
     public UserRoles getRole() {

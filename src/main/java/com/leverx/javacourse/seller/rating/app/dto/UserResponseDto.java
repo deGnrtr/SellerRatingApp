@@ -12,8 +12,8 @@ public class UserResponseDto {
     private String secondName;
     private String email;
     private List<ItemResponseDto> sellersItems = new ArrayList<>();
-    private List<CommentResponseDto> ownComments = new ArrayList<>();
-    private List<CommentResponseDto> assignedComments = new ArrayList<>();
+    private List<ReviewResponseDto> ownComments = new ArrayList<>();
+    private List<ReviewResponseDto> assignedComments = new ArrayList<>();
     private LocalDate created;
     private BigDecimal rating;
     private String status;
@@ -67,19 +67,19 @@ public class UserResponseDto {
         this.sellersItems = sellersItems;
     }
 
-    public List<CommentResponseDto> getOwnComments() {
+    public List<ReviewResponseDto> getOwnComments() {
         return ownComments;
     }
 
-    public void setOwnComments(List<CommentResponseDto> comments) {
+    public void setOwnComments(List<ReviewResponseDto> comments) {
         this.ownComments = comments;
     }
 
-    public List<CommentResponseDto> getAssignedComments() {
+    public List<ReviewResponseDto> getAssignedComments() {
         return assignedComments;
     }
 
-    public void setAssignedComments(List<CommentResponseDto> assignedComments) {
+    public void setAssignedComments(List<ReviewResponseDto> assignedComments) {
         this.assignedComments = assignedComments;
     }
 

@@ -3,12 +3,12 @@ package com.leverx.javacourse.seller.rating.app.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class CommentResponseDto {
+public class ReviewResponseDto {
     private Long Id;
-    private String commentText;
+    private String reviewText;
     private LocalDate created;
-    private String commentStatus;
-    private BigDecimal ratingFromComment;
+    private String reviewStatus;
+    private BigDecimal ratingFromReview;
     private Long author;
     private Long seller;
 
@@ -20,12 +20,12 @@ public class CommentResponseDto {
         Id = id;
     }
 
-    public String getCommentText() {
-        return commentText;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
     }
 
     public LocalDate getCreated() {
@@ -36,20 +36,20 @@ public class CommentResponseDto {
         this.created = created;
     }
 
-    public String getCommentStatus() {
-        return commentStatus;
+    public String getReviewStatus() {
+        return reviewStatus;
     }
 
-    public void setCommentStatus(String commentStatus) {
-        this.commentStatus = commentStatus;
+    public void setReviewStatus(String reviewStatus) {
+        this.reviewStatus = reviewStatus;
     }
 
-    public BigDecimal getRatingFromComment() {
-        return ratingFromComment;
+    public BigDecimal getRatingFromReview() {
+        return ratingFromReview;
     }
 
-    public void setRatingFromComment(BigDecimal rating) {
-        this.ratingFromComment = rating;
+    public void setRatingFromReview(BigDecimal rating) {
+        this.ratingFromReview = rating;
     }
 
     public Long getAuthor() {

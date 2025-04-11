@@ -14,8 +14,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "comment")
-public class Comment {
+@Table(name = "review")
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Comment {
     private Long id;
 
     @Column(name = "text")
-    private String commentText;
+    private String reviewText;
 
     @CreatedDate
     @Column(name = "created_date")
@@ -33,7 +33,7 @@ public class Comment {
     private String status = "NOT_VERIFIED";
 
     @Column(name = "rating")
-    private BigDecimal ratingFromComment;
+    private BigDecimal ratingFromReview;
 
     @ManyToOne
     @JoinColumn(name = "author")
@@ -55,15 +55,15 @@ public class Comment {
         this.author = author;
     }
 
-    public Comment() {
+    public Review() {
     }
 
-    public Comment(Long id, String commentText, LocalDate created, String status, BigDecimal ratingFromComment, User author, User seller) {
+    public Review(Long id, String reviewText, LocalDate created, String status, BigDecimal ratingFromReview, User author, User seller) {
         this.id = id;
-        this.commentText = commentText;
+        this.reviewText = reviewText;
         this.created = created;
         this.status = status;
-        this.ratingFromComment = ratingFromComment;
+        this.ratingFromReview = ratingFromReview;
         this.author = author;
         this.seller = seller;
     }
@@ -72,12 +72,12 @@ public class Comment {
         return id;
     }
 
-    public String getCommentText() {
-        return commentText;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
     }
 
     public LocalDate getCreated() {
@@ -92,16 +92,16 @@ public class Comment {
         return status;
     }
 
-    public void setStatus(String commentStatus) {
-        this.status = status;
+    public void setStatus(String reviewStatus) {
+        this.status = reviewStatus;
     }
 
-    public BigDecimal getRatingFromComment() {
-        return ratingFromComment;
+    public BigDecimal getRatingFromReview() {
+        return ratingFromReview;
     }
 
-    public void setRatingFromComment(BigDecimal rating) {
-        this.ratingFromComment = rating;
+    public void setRatingFromReview(BigDecimal rating) {
+        this.ratingFromReview = rating;
     }
 
     public User getSeller() {
@@ -115,12 +115,12 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment" +
+        return "Review" +
                 "\n id=" + id +
-                "\n , commentText='" + commentText + '\'' +
+                "\n , reviewText='" + reviewText + '\'' +
                 "\n , created=" + created +
                 "\n , status='" + status + '\'' +
-                "\n , ratingFromComment=" + ratingFromComment +
+                "\n , ratingFromReview=" + ratingFromReview +
                 "\n , author=" + author +
                 "\n , seller=" + seller;
     }

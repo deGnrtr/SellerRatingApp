@@ -1,16 +1,16 @@
 package com.leverx.javacourse.seller.rating.app.controller;
 
-import com.leverx.javacourse.seller.rating.app.dto.CommentCreateDto;
-import com.leverx.javacourse.seller.rating.app.dto.CommentResponseDto;
+import com.leverx.javacourse.seller.rating.app.dto.ReviewCreateDto;
+import com.leverx.javacourse.seller.rating.app.dto.ReviewResponseDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
-import com.leverx.javacourse.seller.rating.app.entity.Comment;
+import com.leverx.javacourse.seller.rating.app.entity.Review;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
-import com.leverx.javacourse.seller.rating.app.mapper.CommentMapper;
+import com.leverx.javacourse.seller.rating.app.mapper.ReviewMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
-import com.leverx.javacourse.seller.rating.app.service.CommentService;
+import com.leverx.javacourse.seller.rating.app.service.ReviewService;
 import com.leverx.javacourse.seller.rating.app.service.EmailService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -34,14 +34,14 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final CommentService commentService;
+    private final ReviewService reviewService;
     private final UserMapper userMapper;
-    private final CommentMapper commentDtoMapper;
+    private final ReviewMapper commentDtoMapper;
     private final EmailService emailService;
 
-    public UserController(UserService userService, CommentService commentService, UserMapper userMapper, CommentMapper commentDtoMapper, EmailService emailService) {
+    public UserController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper commentDtoMapper, EmailService emailService) {
         this.userService = userService;
-        this.commentService = commentService;
+        this.reviewService = reviewService;
         this.userMapper = userMapper;
         this.commentDtoMapper = commentDtoMapper;
         this.emailService = emailService;
@@ -69,19 +69,19 @@ public class UserController {
 
     @PostMapping("/{id}/comments")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<CommentResponseDto> addComment(@RequestBody CommentCreateDto commentCreateDto, @PathVariable Long id) {
-        Comment Comment = commentDtoMapper.toComment(commentCreateDto);
-        Comment newComment = commentService.setComment(Comment, id);
-        emailService.notifyAdmin("New comment", String.format("New comment added\n %s", newComment));
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(commentService.save(newComment)));
+    public ResponseEntity<ReviewResponseDto> addComment(@RequestBody ReviewCreateDto reviewCreateDto, @PathVariable Long id) {
+        Review Review = commentDtoMapper.toComment(reviewCreateDto);
+        Review newReview = reviewService.setComment(Review, id);
+        emailService.notifyAdmin("New review", String.format("New review added\n %s", newReview));
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(reviewService.save(newReview)));
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getAllSellerComments(@PathVariable Long id) {
+    public ResponseEntity<List<ReviewResponseDto>> getAllSellerComments(@PathVariable Long id) {
         Seller requestedUser = (Seller) userService.findByIdAndStatus(id, "VERIFIED");
-        List<Comment> requestedComments = requestedUser.getAssignedComments().stream()
+        List<Review> requestedReviews = requestedUser.getAssignedComments().stream()
                 .filter(a -> a.getStatus().equals("VERIFIED")).toList();
-        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDtoList(requestedComments));
+        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDtoList(requestedReviews));
     }
 
     @DeleteMapping("/{id}")

@@ -3,7 +3,6 @@ package com.leverx.javacourse.seller.rating.app.mapper;
 import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
 import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
-import com.leverx.javacourse.seller.rating.app.entity.User;
 
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import org.mapstruct.Mapper;
@@ -17,7 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {LocalDate.class, BigDecimal.class},
-        uses = {CommentMapper.class, ItemMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+        uses = {ReviewMapper.class, ItemMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     Seller toSeller(UserCreateDto userCreateDto);

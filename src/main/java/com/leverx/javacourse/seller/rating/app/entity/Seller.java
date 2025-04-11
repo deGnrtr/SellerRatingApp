@@ -19,7 +19,7 @@ public class Seller extends User{
     private List<Item> sellersItems = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "seller")
-    private List<Comment> assignedComments = new ArrayList<>();
+    private List<Review> assignedReviews = new ArrayList<>();
 
     @Column(name = "rating")
     private BigDecimal rating = new BigDecimal(0);
@@ -29,20 +29,20 @@ public class Seller extends User{
     }
 
     public Seller(Long id, String login, String password, String firstName, String secondName, String email
-            , LocalDate created, UserRoles role, List<Comment> ownComments, String status, List<Item> sellersItems
-            , List<Comment> assignedComments, BigDecimal rating) {
-        super(id, login, password, firstName, secondName, email, created, role, ownComments, status);
+            , LocalDate created, UserRoles role, List<Review> ownReviews, String status, List<Item> sellersItems
+            , List<Review> assignedReviews, BigDecimal rating) {
+        super(id, login, password, firstName, secondName, email, created, role, ownReviews, status);
         this.sellersItems = sellersItems;
-        this.assignedComments = assignedComments;
+        this.assignedReviews = assignedReviews;
         this.rating = rating;
     }
 
-    public List<Comment> getAssignedComments() {
-        return assignedComments;
+    public List<Review> getAssignedComments() {
+        return assignedReviews;
     }
 
-    public void setAssignedComments(List<Comment> assignedComments) {
-        this.assignedComments = assignedComments;
+    public void setAssignedComments(List<Review> assignedReviews) {
+        this.assignedReviews = assignedReviews;
     }
 
     public List<Item> getSellersItems() {
@@ -66,7 +66,7 @@ public class Seller extends User{
     public String toString() {
         return "Seller" +
                 "\n sellersItems=" + sellersItems +
-                "\n , assignedComments=" + assignedComments +
+                "\n , assignedComments=" + assignedReviews +
                 "\n , rating=" + rating +
                 "\n , id=" + id +
                 "\n , login='" + login + '\'' +
@@ -74,6 +74,6 @@ public class Seller extends User{
                 "\n , secondName='" + secondName + '\'' +
                 "\n , email='" + email + '\'' +
                 "\n , created=" + created +
-                ", ownComments=" + ownComments;
+                ", ownComments=" + ownReviews;
     }
 }
