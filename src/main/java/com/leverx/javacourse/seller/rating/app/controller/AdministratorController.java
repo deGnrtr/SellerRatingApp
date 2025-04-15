@@ -51,8 +51,8 @@ public class AdministratorController {
 
     @GetMapping("/all-unverified-comments")
     public ResponseEntity<List<ReviewResponseDto>> getAllUnverifiedComments() {
-        List<Review> requestedReviews = reviewService.findAllComments("NOT_VERIFIED");
-        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toCommentResponseDtoList(requestedReviews));
+        List<Review> requestedReviews = reviewService.findAllReviews("NOT_VERIFIED");
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDtoList(requestedReviews));
     }
 
     @GetMapping("/user-verify")
@@ -74,10 +74,10 @@ public class AdministratorController {
 
     @GetMapping("/review-verify")
     public ResponseEntity<ReviewResponseDto> verifyComment(@RequestParam Long id){
-        Review verifiedReview = reviewService.updateComment(id, reviewService.verifyComment(id));
+        Review verifiedReview = reviewService.updateReview(id, reviewService.verifyReview(id));
         Seller targetSeller = (Seller) verifiedReview.getSeller();
         userService.updateRating(targetSeller, verifiedReview.getRatingFromReview());
-        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toCommentResponseDto(verifiedReview));
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(verifiedReview));
     }
 
     @GetMapping("/review-refuse")

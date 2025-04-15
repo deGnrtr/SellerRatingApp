@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/review")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -26,7 +26,7 @@ public class ReviewController {
     @GetMapping("/{id}")
     public ResponseEntity<ReviewResponseDto> getComment(@PathVariable Long id) {
         Review review = reviewService.findByIdAndStatus(id, "VERIFIED");
-        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toCommentResponseDto(review));
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(review));
     }
 
     @DeleteMapping("/{id}")
@@ -39,8 +39,8 @@ public class ReviewController {
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReviewResponseDto> updateComment(@PathVariable Long commentId, @RequestBody ReviewCreateDto reviewCreateDto){
-        Review newReview = reviewMapper.toComment(reviewCreateDto);
-        Review updatedReview = reviewService.updateComment(commentId, newReview);
-        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toCommentResponseDto(reviewService.save(updatedReview)));
+        Review newReview = reviewMapper.toReview(reviewCreateDto);
+        Review updatedReview = reviewService.updateReview(commentId, newReview);
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(reviewService.save(updatedReview)));
     }
 }

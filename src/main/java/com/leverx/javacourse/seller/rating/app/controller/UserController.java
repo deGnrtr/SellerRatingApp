@@ -70,10 +70,10 @@ public class UserController {
     @PostMapping("/{id}/comments")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReviewResponseDto> addComment(@RequestBody ReviewCreateDto reviewCreateDto, @PathVariable Long id) {
-        Review Review = commentDtoMapper.toComment(reviewCreateDto);
-        Review newReview = reviewService.setComment(Review, id);
+        Review Review = commentDtoMapper.toReview(reviewCreateDto);
+        Review newReview = reviewService.setReview(Review, id);
         emailService.notifyAdmin("New review", String.format("New review added\n %s", newReview));
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toCommentResponseDto(reviewService.save(newReview)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toReviewResponseDto(reviewService.save(newReview)));
     }
 
     @GetMapping("/{id}/comments")
@@ -81,7 +81,7 @@ public class UserController {
         Seller requestedUser = (Seller) userService.findByIdAndStatus(id, "VERIFIED");
         List<Review> requestedReviews = requestedUser.getAssignedComments().stream()
                 .filter(a -> a.getStatus().equals("VERIFIED")).toList();
-        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toCommentResponseDtoList(requestedReviews));
+        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toReviewResponseDtoList(requestedReviews));
     }
 
     @DeleteMapping("/{id}")

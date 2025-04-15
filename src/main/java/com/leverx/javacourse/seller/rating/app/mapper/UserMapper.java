@@ -11,11 +11,9 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import java.time.LocalDate;
-import java.math.BigDecimal;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = {LocalDate.class, BigDecimal.class},
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {ReviewMapper.class, ItemMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 

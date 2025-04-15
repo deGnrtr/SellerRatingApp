@@ -7,7 +7,7 @@ public class ReviewResponseDto {
     private Long Id;
     private String reviewText;
     private LocalDate created;
-    private String reviewStatus;
+    private String status;
     private BigDecimal ratingFromReview;
     private Long author;
     private Long seller;
@@ -36,12 +36,12 @@ public class ReviewResponseDto {
         this.created = created;
     }
 
-    public String getReviewStatus() {
-        return reviewStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setReviewStatus(String reviewStatus) {
-        this.reviewStatus = reviewStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public BigDecimal getRatingFromReview() {

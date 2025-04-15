@@ -58,7 +58,7 @@ public class AuthenticationController {
     @PostMapping("/register_anon")
     public ResponseEntity<UserResponseDto> createAnonymousSeller(@RequestBody UserCreateDto userCreateDto) {
         User newUser = userService.createUser(userCreateDto);
-        Review review = reviewService.setComment(reviewMapper.toComment(userCreateDto.getAssignedComments().getFirst())
+        Review review = reviewService.setReview(reviewMapper.toReview(userCreateDto.getAssignedComments().getFirst())
                 , newUser.getId());
         Review newReview = reviewService.save(review);
         emailService.notifyAdmin("Registration request", String.format("New user \n %s \n with review %s"

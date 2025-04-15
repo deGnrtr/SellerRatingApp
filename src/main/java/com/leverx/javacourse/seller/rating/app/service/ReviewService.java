@@ -41,7 +41,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<Review> findAllComments(String status) {
+    public List<Review> findAllReviews(String status) {
         return repository.findAllReviewByStatus(status);
     }
 
@@ -62,7 +62,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review setComment(Review review, Long id) {
+    public Review setReview(Review review, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User seller = userService.findById(id);
         User author = userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new);
@@ -74,20 +74,20 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review updateComment(Long commentId, Review newReview) {
+    public Review updateReview(Long commentId, Review newReview) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Review review = findById(commentId);
         Review updatedReview;
         if (userDetails.getUsername().equals(review.getAuthor().getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
-            updatedReview = reviewDtoMapper.updateComment(review, newReview);
+            updatedReview = reviewDtoMapper.updateReview(review, newReview);
         } else throw new UnauthorisedDataModification("Lack of rights.");
         return updatedReview;
     }
 
     @Transactional
-    public Review verifyComment(Long id){
+    public Review verifyReview(Long id){
         Review targetReview = findByIdAndStatus(id, "NOT_VERIFIED");
         targetReview.setStatus("VERIFIED");
         return targetReview;

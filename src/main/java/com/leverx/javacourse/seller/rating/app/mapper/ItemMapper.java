@@ -9,10 +9,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
-import java.time.LocalDate;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, imports = LocalDate.class)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ItemMapper {
 
     Item toItem(ItemCreateDto itemCreateDto);

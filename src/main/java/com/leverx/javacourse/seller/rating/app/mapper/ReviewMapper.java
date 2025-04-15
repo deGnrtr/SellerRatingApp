@@ -9,23 +9,20 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        imports = {LocalDate.class, BigDecimal.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ReviewMapper {
 
-    Review toComment(ReviewCreateDto reviewCreateDto);
+    Review toReview(ReviewCreateDto reviewCreateDto);
 
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "seller", source = "seller.id")
-    ReviewResponseDto toCommentResponseDto(Review review);
+    ReviewResponseDto toReviewResponseDto(Review review);
 
-    List<ReviewResponseDto> toCommentResponseDtoList(List<Review> reviewList);
+    List<ReviewResponseDto> toReviewResponseDtoList(List<Review> reviewList);
 
     @Mapping(target = "id", ignore = true)
-    Review updateComment(@MappingTarget Review review, Review reviewCreateDto);
+    Review updateReview(@MappingTarget Review review, Review reviewCreateDto);
 }
 
