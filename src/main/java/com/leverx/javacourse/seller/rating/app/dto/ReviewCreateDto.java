@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 public class ReviewCreateDto {
     private String reviewText;
-    private String reviewStatus;
     private BigDecimal ratingFromReview;
 
     public String getReviewText() {
@@ -13,14 +12,6 @@ public class ReviewCreateDto {
 
     public void setReviewText(String reviewText) {
         this.reviewText = reviewText;
-    }
-
-    public String getReviewStatus() {
-        return reviewStatus;
-    }
-
-    public void setReviewStatus(String reviewStatus) {
-        this.reviewStatus = reviewStatus;
     }
 
     public BigDecimal getRatingFromReview() {
