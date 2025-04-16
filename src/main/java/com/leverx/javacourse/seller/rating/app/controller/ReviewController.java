@@ -24,23 +24,23 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewResponseDto> getComment(@PathVariable Long id) {
+    public ResponseEntity<ReviewResponseDto> getReview(@PathVariable Long id) {
         Review review = reviewService.findByIdAndStatus(id, "VERIFIED");
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(review));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
-        reviewService.deleteById(commentId);
+    public ResponseEntity<String> deleteReview(@PathVariable Long reviewId) {
+        reviewService.deleteById(reviewId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ReviewResponseDto> updateComment(@PathVariable Long commentId, @RequestBody ReviewCreateDto reviewCreateDto){
+    public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Long reviewId, @RequestBody ReviewCreateDto reviewCreateDto){
         Review newReview = reviewMapper.toReview(reviewCreateDto);
-        Review updatedReview = reviewService.updateReview(commentId, newReview);
+        Review updatedReview = reviewService.updateReview(reviewId, newReview);
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(reviewService.save(updatedReview)));
     }
 }

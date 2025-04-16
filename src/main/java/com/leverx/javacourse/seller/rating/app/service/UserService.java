@@ -1,7 +1,6 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
 import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
-import com.leverx.javacourse.seller.rating.app.dto.UserResponseDto;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
@@ -103,7 +102,7 @@ public class UserService {
 
     @Transactional
     public void updateRating(Seller seller, BigDecimal newRating){
-        BigDecimal updatedRating = seller.getRating().add(newRating).divide(new BigDecimal(seller.getAssignedComments().size()));
+        BigDecimal updatedRating = seller.getRating().add(newRating).divide(new BigDecimal(seller.getAssignedReviews().size()));
         seller.setRating(updatedRating);
         updateUser(seller.getId(), seller);
     }

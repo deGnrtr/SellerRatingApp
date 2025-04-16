@@ -37,11 +37,11 @@ public class Seller extends User{
         this.rating = rating;
     }
 
-    public List<Review> getAssignedComments() {
+    public List<Review> getAssignedReviews() {
         return assignedReviews;
     }
 
-    public void setAssignedComments(List<Review> assignedReviews) {
+    public void setAssignedReviews(List<Review> assignedReviews) {
         this.assignedReviews = assignedReviews;
     }
 
@@ -66,7 +66,7 @@ public class Seller extends User{
     public String toString() {
         return "Seller" +
                 "\n sellersItems=" + sellersItems +
-                "\n , assignedComments=" + assignedReviews +
+                "\n , assignedReviews=" + assignedReviews +
                 "\n , rating=" + rating +
                 "\n , id=" + id +
                 "\n , login='" + login + '\'' +
@@ -74,6 +74,6 @@ public class Seller extends User{
                 "\n , secondName='" + secondName + '\'' +
                 "\n , email='" + email + '\'' +
                 "\n , created=" + created +
-                ", ownComments=" + ownReviews;
+                ", ownReviews=" + ownReviews;
     }
 }

@@ -36,14 +36,14 @@ public class UserController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final UserMapper userMapper;
-    private final ReviewMapper commentDtoMapper;
+    private final ReviewMapper reviewMapper;
     private final EmailService emailService;
 
-    public UserController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper commentDtoMapper, EmailService emailService) {
+    public UserController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper, EmailService emailService) {
         this.userService = userService;
         this.reviewService = reviewService;
         this.userMapper = userMapper;
-        this.commentDtoMapper = commentDtoMapper;
+        this.reviewMapper = reviewMapper;
         this.emailService = emailService;
     }
 
@@ -67,21 +67,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.sellerToUserResponseDtoList(allUsers));
     }
 
-    @PostMapping("/{id}/comments")
+    @PostMapping("/{id}/review")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ReviewResponseDto> addComment(@RequestBody ReviewCreateDto reviewCreateDto, @PathVariable Long id) {
-        Review Review = commentDtoMapper.toReview(reviewCreateDto);
+    public ResponseEntity<ReviewResponseDto> addReview(@RequestBody ReviewCreateDto reviewCreateDto, @PathVariable Long id) {
+        Review Review = reviewMapper.toReview(reviewCreateDto);
         Review newReview = reviewService.setReview(Review, id);
         emailService.notifyAdmin("New review", String.format("New review added\n %s", newReview));
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentDtoMapper.toReviewResponseDto(reviewService.save(newReview)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewMapper.toReviewResponseDto(reviewService.save(newReview)));
     }
 
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<List<ReviewResponseDto>> getAllSellerComments(@PathVariable Long id) {
+    @GetMapping("/{id}/review")
+    public ResponseEntity<List<ReviewResponseDto>> getAllSellerReviews(@PathVariable Long id) {
         Seller requestedUser = (Seller) userService.findByIdAndStatus(id, "VERIFIED");
-        List<Review> requestedReviews = requestedUser.getAssignedComments().stream()
+        List<Review> requestedReviews = requestedUser.getAssignedReviews().stream()
                 .filter(a -> a.getStatus().equals("VERIFIED")).toList();
-        return ResponseEntity.status(HttpStatus.OK).body(commentDtoMapper.toReviewResponseDtoList(requestedReviews));
+        return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDtoList(requestedReviews));
     }
 
     @DeleteMapping("/{id}")
