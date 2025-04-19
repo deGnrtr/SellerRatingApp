@@ -10,12 +10,13 @@ import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import com.leverx.javacourse.seller.rating.app.mapper.ReviewMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
-import com.leverx.javacourse.seller.rating.app.service.ReviewService;
 import com.leverx.javacourse.seller.rating.app.service.EmailService;
+import com.leverx.javacourse.seller.rating.app.service.ReviewService;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +39,15 @@ public class UserController {
     private final UserMapper userMapper;
     private final ReviewMapper reviewMapper;
     private final EmailService emailService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper, EmailService emailService) {
+    public UserController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.reviewService = reviewService;
         this.userMapper = userMapper;
         this.reviewMapper = reviewMapper;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/{id}")
@@ -67,6 +70,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.sellerToUserResponseDtoList(allUsers));
     }
 
+    //FIXME stackowerflow
     @PostMapping("/{id}/review")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReviewResponseDto> addReview(@RequestBody ReviewCreateDto reviewCreateDto, @PathVariable Long id) {
@@ -84,6 +88,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDtoList(requestedReviews));
     }
 
+    //TODO check after creating
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
@@ -91,15 +96,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //TODO check before deleting
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long userId, @RequestBody UserCreateDto userCreateDto) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserCreateDto userCreateDto) {
+        userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
         UserResponseDto userResponseDto = null;
         if (userCreateDto.getRole().equals("SELLER")){
-            userResponseDto = userMapper.sellerToUserResponseDto((Seller) userService.updateUser(userId, userMapper
+            userResponseDto = userMapper.sellerToUserResponseDto((Seller) userService.updateUser(id, userMapper
                     .toSeller(userCreateDto)));
         }else if (userCreateDto.getRole().equals("VISITOR")){
-            userResponseDto = userMapper.visitorToUserResponseDto((Visitor) userService.updateUser(userId, userMapper
+            userResponseDto = userMapper.visitorToUserResponseDto((Visitor) userService.updateUser(id, userMapper
                     .toVisitor(userCreateDto)));
         }
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
