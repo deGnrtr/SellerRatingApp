@@ -22,7 +22,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final UserService userService;
-    public ItemMapper itemMapper;
+    public final ItemMapper itemMapper;
 
     public ItemController(ItemService commentService, UserService userService, ItemMapper commentDtoMapper) {
         this.itemService = commentService;

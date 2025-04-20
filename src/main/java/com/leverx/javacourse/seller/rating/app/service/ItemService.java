@@ -29,7 +29,7 @@ public class ItemService {
     public Item updateItem(Long itemId, Item newItem) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Item item = findById(itemId);
-        Item updatedItem = null;
+        Item updatedItem;
         if (userDetails.getUsername().equals(item.getSeller().getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {

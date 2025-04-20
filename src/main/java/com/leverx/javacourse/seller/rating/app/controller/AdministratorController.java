@@ -49,7 +49,7 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
     }
 
-    @GetMapping("/all-unverified-comments")
+    @GetMapping("/all-unverified-reviews")
     public ResponseEntity<List<ReviewResponseDto>> getAllUnverifiedComments() {
         List<Review> requestedReviews = reviewService.findAllReviews("NOT_VERIFIED");
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDtoList(requestedReviews));
@@ -72,6 +72,7 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //FIXME troubles with rating update because of BigDecimal
     @GetMapping("/review-verify")
     public ResponseEntity<ReviewResponseDto> verifyComment(@RequestParam Long id){
         Review verifiedReview = reviewService.updateReview(id, reviewService.verifyReview(id));

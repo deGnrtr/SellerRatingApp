@@ -1,12 +1,9 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
-import com.leverx.javacourse.seller.rating.app.entity.Administrator;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class EmailService{

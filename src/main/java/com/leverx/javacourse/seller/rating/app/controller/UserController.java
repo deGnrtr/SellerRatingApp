@@ -70,7 +70,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.sellerToUserResponseDtoList(allUsers));
     }
 
-    //FIXME stackowerflow
     @PostMapping("/{id}/review")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReviewResponseDto> addReview(@RequestBody ReviewCreateDto reviewCreateDto, @PathVariable Long id) {
@@ -88,7 +87,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDtoList(requestedReviews));
     }
 
-    //TODO check after creating
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
@@ -96,7 +94,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    //TODO check before deleting
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserCreateDto userCreateDto) {

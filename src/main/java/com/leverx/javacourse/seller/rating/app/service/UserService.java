@@ -102,7 +102,8 @@ public class UserService {
 
     @Transactional
     public void updateRating(Seller seller, BigDecimal newRating){
-        BigDecimal updatedRating = seller.getRating().add(newRating).divide(new BigDecimal(seller.getAssignedReviews().size()));
+        BigDecimal sellersReviewCount = new BigDecimal(seller.getAssignedReviews().size());
+        BigDecimal updatedRating = seller.getRating().add(newRating).divide(sellersReviewCount);
         seller.setRating(updatedRating);
         updateUser(seller.getId(), seller);
     }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewService reviewService;
-    public ReviewMapper reviewMapper;
+    public final ReviewMapper reviewMapper;
 
     public ReviewController(ReviewService reviewService, UserService userService, ReviewMapper reviewMapper) {
         this.reviewService = reviewService;
