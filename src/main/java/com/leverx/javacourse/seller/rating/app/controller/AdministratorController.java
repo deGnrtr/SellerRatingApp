@@ -7,6 +7,7 @@ import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
+import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
 import com.leverx.javacourse.seller.rating.app.mapper.ReviewMapper;
 import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
 import com.leverx.javacourse.seller.rating.app.service.ReviewService;
@@ -73,6 +74,7 @@ public class AdministratorController {
     }
 
     //FIXME troubles with rating update because of BigDecimal
+    //TODO maybe @Transactional
     @GetMapping("/review-verify")
     public ResponseEntity<ReviewResponseDto> verifyComment(@RequestParam Long id){
         Review verifiedReview = reviewService.updateReview(id, reviewService.verifyReview(id));
@@ -83,7 +85,9 @@ public class AdministratorController {
 
     @GetMapping("/review-refuse")
     public ResponseEntity<String> refuseComment(@RequestParam Long id){
-        reviewService.deleteById(id);
+        if (reviewService.findById(id).getStatus().equals("NOT_VERIFIED")){
+            reviewService.deleteById(id);
+        }else throw new EntityNotFoundException("User has benn verified already.");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlingAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleException(EntityNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<ExceptionResponseDto> handleException(EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponseDto(e.getMessage()));
     }
 
     @ExceptionHandler(UnauthorisedDataModification.class)

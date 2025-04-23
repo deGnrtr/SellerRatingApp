@@ -31,16 +31,17 @@ public class ReviewController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> deleteReview(@PathVariable Long reviewId) {
-        reviewService.deleteById(reviewId);
+    public ResponseEntity<String> deleteReview(@PathVariable Long id) {
+        reviewService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //TODO recalculate rating after updating
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Long reviewId, @RequestBody ReviewCreateDto reviewCreateDto){
+    public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Long id, @RequestBody ReviewCreateDto reviewCreateDto){
         Review newReview = reviewMapper.toReview(reviewCreateDto);
-        Review updatedReview = reviewService.updateReview(reviewId, newReview);
+        Review updatedReview = reviewService.updateReview(id, newReview);
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(reviewService.save(updatedReview)));
     }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Seller extends User{
     private List<Review> assignedReviews = new ArrayList<>();
 
     @Column(name = "rating")
-    private BigDecimal rating = new BigDecimal(0);
+    private BigDecimal rating = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
 
     public Seller() {
 
