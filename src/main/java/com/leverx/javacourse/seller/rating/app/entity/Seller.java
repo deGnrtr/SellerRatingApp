@@ -16,10 +16,10 @@ import java.util.List;
 @Table(name = "seller")
 public class Seller extends User{
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "seller")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller")
     private List<Item> sellersItems = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "seller")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seller")
     private List<Review> assignedReviews = new ArrayList<>();
 
     @Column(name = "rating")

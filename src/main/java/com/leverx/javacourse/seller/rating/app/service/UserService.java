@@ -103,8 +103,10 @@ public class UserService {
 
     @Transactional
     public void updateRating(Seller seller, BigDecimal newRating){
-        BigDecimal sellersReviewCount = new BigDecimal(seller.getAssignedReviews().size());
-        BigDecimal updatedRating = seller.getRating().add(newRating).divide(sellersReviewCount, 2, RoundingMode.HALF_UP);
+        long verifiedReviews = seller.getAssignedReviews().stream().filter(r -> r.getStatus()
+                .equals("VERIFIED")).count();
+        BigDecimal verifiedSum = seller.getRating().multiply(BigDecimal.valueOf(verifiedReviews));
+        BigDecimal updatedRating = verifiedSum.add(newRating).divide(BigDecimal.valueOf(verifiedReviews + 1), 2, RoundingMode.HALF_UP);
         seller.setRating(updatedRating);
         updateUser(seller.getId(), seller);
     }

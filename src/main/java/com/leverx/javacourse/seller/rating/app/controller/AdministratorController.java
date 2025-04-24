@@ -73,7 +73,6 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    //FIXME troubles with rating update because of BigDecimal
     //TODO maybe @Transactional
     @GetMapping("/review-verify")
     public ResponseEntity<ReviewResponseDto> verifyComment(@RequestParam Long id){
