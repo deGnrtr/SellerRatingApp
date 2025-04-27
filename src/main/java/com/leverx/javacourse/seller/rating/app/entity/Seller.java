@@ -66,15 +66,10 @@ public class Seller extends User{
     @Override
     public String toString() {
         return "Seller" +
-                "\n sellersItems=" + sellersItems +
-                "\n , assignedReviews=" + assignedReviews +
-                "\n , rating=" + rating +
-                "\n , id=" + id +
                 "\n , login='" + login + '\'' +
                 ",\n  firstName='" + firstName + '\'' +
                 "\n , secondName='" + secondName + '\'' +
                 "\n , email='" + email + '\'' +
-                "\n , created=" + created +
-                ", ownReviews=" + ownReviews;
+                "\n , created=" + created;
     }
 }

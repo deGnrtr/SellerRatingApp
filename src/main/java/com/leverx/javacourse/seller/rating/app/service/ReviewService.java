@@ -1,6 +1,7 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
 import com.leverx.javacourse.seller.rating.app.entity.Review;
+import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
@@ -90,6 +91,8 @@ public class ReviewService {
     public Review verifyReview(Long id){
         Review targetReview = findByIdAndStatus(id, "NOT_VERIFIED");
         targetReview.setStatus("VERIFIED");
+        Seller targetSeller = (Seller) targetReview.getSeller();
+        userService.updateRating(targetSeller, targetReview.getRatingFromReview());
         return targetReview;
     }
 

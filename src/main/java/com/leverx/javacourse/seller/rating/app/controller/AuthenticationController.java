@@ -15,7 +15,6 @@ import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,20 +29,17 @@ public class AuthenticationController {
     private final UserMapper userMapper;
     private final ReviewMapper reviewMapper;
     private final EmailService emailService;
-    private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthenticationController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
+    public AuthenticationController(UserService userService, ReviewService reviewService, UserMapper userMapper, ReviewMapper reviewMapper, EmailService emailService) {
         this.userService = userService;
         this.reviewService = reviewService;
         this.userMapper = userMapper;
         this.reviewMapper = reviewMapper;
         this.emailService = emailService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateDto userCreateDto) {
-        userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
         User newUser = userService.createUser(userCreateDto);
         emailService.notifyAdmin("Registration request", String.format("New user \n %s", newUser));
         UserResponseDto responseDto = null;

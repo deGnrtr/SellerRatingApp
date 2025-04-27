@@ -69,16 +69,15 @@ public class AdministratorController {
 
     @GetMapping("/user-refuse")
     public ResponseEntity<String> refuseUser(@RequestParam Long id){
-        userService.deleteById(id);
+        if (userService.findById(id).getStatus().equals("NOT_VERIFIED")){
+            userService.deleteById(id);
+        }else throw new EntityNotFoundException("User has been verified already.");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    //TODO maybe @Transactional
     @GetMapping("/review-verify")
     public ResponseEntity<ReviewResponseDto> verifyComment(@RequestParam Long id){
         Review verifiedReview = reviewService.updateReview(id, reviewService.verifyReview(id));
-        Seller targetSeller = (Seller) verifiedReview.getSeller();
-        userService.updateRating(targetSeller, verifiedReview.getRatingFromReview());
         return ResponseEntity.status(HttpStatus.OK).body(reviewMapper.toReviewResponseDto(verifiedReview));
     }
 
@@ -86,7 +85,7 @@ public class AdministratorController {
     public ResponseEntity<String> refuseComment(@RequestParam Long id){
         if (reviewService.findById(id).getStatus().equals("NOT_VERIFIED")){
             reviewService.deleteById(id);
-        }else throw new EntityNotFoundException("User has benn verified already.");
+        }else throw new EntityNotFoundException("Review has been verified already.");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
