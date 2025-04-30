@@ -8,7 +8,7 @@ public class UserCreateDto {
     private String firstName;
     private String secondName;
     private String email;
-    private List<ReviewCreateDto> assignedComments;
+    private List<ReviewCreateDto> assignedReviews;
     private String role;
 
     public String getLogin() {
@@ -59,12 +59,12 @@ public class UserCreateDto {
         this.email = email;
     }
 
-    public List<ReviewCreateDto> getAssignedComments() {
-        return assignedComments;
+    public List<ReviewCreateDto> getAssignedReviews() {
+        return assignedReviews;
     }
 
     public void setAssignedComments(List<ReviewCreateDto> assignedComments) {
-        this.assignedComments = assignedComments;
+        this.assignedReviews = assignedComments;
     }
 
 }

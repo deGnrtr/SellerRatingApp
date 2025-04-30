@@ -14,7 +14,6 @@ import com.leverx.javacourse.seller.rating.app.repository.VisitorRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +30,11 @@ public class UserService {
     private final UserRepository<User> userRepository;
     private final UserMapper userMapper;
 
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public UserService(SellerRepository sellerRepository, VisitorRepository visitorRepository, UserRepository<User> userRepository, ItemService itemService, UserMapper userMapper, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(SellerRepository sellerRepository, VisitorRepository visitorRepository, UserRepository<User> userRepository,  UserMapper userMapper) {
         this.sellerRepository = sellerRepository;
         this.visitorRepository = visitorRepository;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -55,7 +51,6 @@ public class UserService {
 
     @Transactional
     public User createUser(UserCreateDto newUser) {
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         User createdUser = null;
         if ("SELLER".equals(newUser.getRole())) {
             createdUser = sellerRepository.save(userMapper.toSeller(newUser));
