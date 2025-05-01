@@ -22,5 +22,6 @@ public interface ItemMapper {
     List<ItemResponseDto> toItemResponseDtoList(List<Item> itemList);
 
     @Mapping(target = "id", ignore = true)
-    Item updateItem(@MappingTarget Item item, Item itemCreateDto);
+    @Mapping(target = "seller", ignore = true)
+    Item updateItem(@MappingTarget Item item, Item newItem);
 }

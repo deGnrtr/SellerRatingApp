@@ -52,16 +52,16 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('SELLER', 'ADMINISTRATOR')")
-    public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
-       itemService.deleteById(itemId);
+    public ResponseEntity<String> deleteItem(@PathVariable Long id) {
+       itemService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('SELLER', 'ADMINISTRATOR')")
-    public ResponseEntity<ItemResponseDto> updateItem(@PathVariable Long itemId, @RequestBody ItemCreateDto itemCreateDto){
+    public ResponseEntity<ItemResponseDto> updateItem(@PathVariable Long id, @RequestBody ItemCreateDto itemCreateDto){
         Item newItem = itemMapper.toItem(itemCreateDto);
-        Item updatedItem = itemService.updateItem(itemId, newItem);
+        Item updatedItem = itemService.updateItem(id, newItem);
         return ResponseEntity.status(HttpStatus.OK).body(itemMapper.toItemResponseDto(updatedItem));
     }
 }

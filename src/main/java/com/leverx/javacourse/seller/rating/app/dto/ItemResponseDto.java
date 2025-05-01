@@ -3,7 +3,7 @@ package com.leverx.javacourse.seller.rating.app.dto;
 import java.time.LocalDate;
 
 public class ItemResponseDto {
-    private Long Id;
+    private Long id;
     private String title;
     private String description;
     private String gameTitle;
@@ -12,11 +12,11 @@ public class ItemResponseDto {
     private Long seller;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getTitle() {
