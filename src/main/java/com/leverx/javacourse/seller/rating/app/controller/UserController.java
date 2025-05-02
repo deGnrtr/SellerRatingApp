@@ -94,6 +94,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //FIXME fix null rating
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserCreateDto userCreateDto) {

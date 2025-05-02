@@ -23,6 +23,9 @@ public interface ReviewMapper {
     List<ReviewResponseDto> toReviewResponseDtoList(List<Review> reviewList);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "seller", ignore = true)
+    @Mapping(target = "status", ignore = true)
     Review updateReview(@MappingTarget Review review, Review reviewCreateDto);
 }
 

@@ -30,8 +30,12 @@ public interface UserMapper {
     List<UserResponseDto> sellerToUserResponseDtoList(List<Seller> users);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "assignedReviews", ignore = true)
     Seller updateSeller(@MappingTarget Seller seller, Seller newSeller);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "assignedReviews", ignore = true)
     Visitor updateVisitor(@MappingTarget Visitor visitor, Visitor newVisitor);
 }

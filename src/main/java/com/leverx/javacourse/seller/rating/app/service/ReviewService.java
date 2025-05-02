@@ -83,6 +83,7 @@ public class ReviewService {
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
             updatedReview = reviewDtoMapper.updateReview(review, newReview);
+            userService.updateRating((Seller) review.getSeller(), review.getRatingFromReview(), newReview.getRatingFromReview());
         } else throw new UnauthorisedDataModification("Lack of rights.");
         return updatedReview;
     }
@@ -90,9 +91,9 @@ public class ReviewService {
     @Transactional
     public Review verifyReview(Long id){
         Review targetReview = findByIdAndStatus(id, "NOT_VERIFIED");
-        targetReview.setStatus("VERIFIED");
         Seller targetSeller = (Seller) targetReview.getSeller();
-        userService.updateRating(targetSeller, targetReview.getRatingFromReview());
+        userService.calculateRating(targetSeller, targetReview.getRatingFromReview());
+        targetReview.setStatus("VERIFIED");
         return targetReview;
     }
 

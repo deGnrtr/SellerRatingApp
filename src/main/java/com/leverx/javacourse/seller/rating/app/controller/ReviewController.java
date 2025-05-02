@@ -36,7 +36,7 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    //TODO recalculate rating after updating
+    //FIXME fix rating update
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Long id, @RequestBody ReviewCreateDto reviewCreateDto){
