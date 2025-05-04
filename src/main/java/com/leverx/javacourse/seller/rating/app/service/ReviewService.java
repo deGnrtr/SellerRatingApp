@@ -32,13 +32,13 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public Review findByIdAndStatus(Long id, String status) {
         Optional<Review> requestedComment = repository.findByIdAndStatus(id, status);
-        return requestedComment.orElseThrow(EntityNotFoundException::new);
+        return requestedComment.orElseThrow(() -> new EntityNotFoundException("No review found matching request!"));
     }
 
     @Transactional(readOnly = true)
     public Review findById(Long id) {
         Optional<Review> requestedComment = repository.findById(id);
-        return requestedComment.orElseThrow(EntityNotFoundException::new);
+        return requestedComment.orElseThrow(() -> new EntityNotFoundException("No review found matching request!"));
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +66,7 @@ public class ReviewService {
     public Review setReview(Review review, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User seller = userService.findById(id);
-        User author = userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new);
+        User author = userService.findByLogin(userDetails.getUsername());
         if (UserRoles.SELLER.equals(seller.getRole()) && !(seller.getId().equals(author.getId()))){
             review.setSeller(seller);
             review.setAuthor(author);

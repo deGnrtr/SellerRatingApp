@@ -115,8 +115,9 @@ public class Review {
 
     @Override
     public String toString() {
-        return  ",\n reviewText='" + reviewText + '\'' +
+        return  "\n reviewText='" + reviewText + '\'' +
                 ",\n ratingFromReview=" + ratingFromReview +
-                ",\n author=" + author.getLogin();
+                ",\n author_login=" + author.getLogin() +
+                ",\n author_id=" + author.getId();
     }
 }

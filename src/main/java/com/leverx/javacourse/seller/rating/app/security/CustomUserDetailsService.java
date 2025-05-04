@@ -1,5 +1,6 @@
 package com.leverx.javacourse.seller.rating.app.security;
 
+import com.leverx.javacourse.seller.rating.app.entity.User;
 import com.leverx.javacourse.seller.rating.app.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,11 +19,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userService.findByLogin(username).map(user -> new org.springframework.security.core.userdetails.User(
-                        user.getLogin(),
-                        user.getPassword(),
-                        Collections.singleton(user.getRole())
-                ))
-                .orElseThrow(() -> new UsernameNotFoundException("Can't find specified user" + username));
+        User user = userService.findByLogin(username);
+        return new org.springframework.security.core.userdetails
+                .User(user.getLogin(), user.getPassword(), Collections.singleton(user.getRole()));
     }
 }

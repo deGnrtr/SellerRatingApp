@@ -40,13 +40,13 @@ public class UserService {
     @Transactional(readOnly = true)
     public User findById(Long id) {
         Optional<User> requestedUser = userRepository.findById(id);
-        return requestedUser.orElseThrow(EntityNotFoundException::new);
+        return requestedUser.orElseThrow(() -> new EntityNotFoundException("No user found matching request!"));
     }
 
     @Transactional(readOnly = true)
     public User findByIdAndStatus(Long id, String status) {
         Optional<User> requestedUser = userRepository.findByIdAndStatus(id, status);
-        return requestedUser.orElseThrow(EntityNotFoundException::new);
+        return requestedUser.orElseThrow(() -> new EntityNotFoundException("No user found matching request!"));
     }
 
     @Transactional
@@ -81,8 +81,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> findByLogin(String login) {
-        return userRepository.findByLogin(login);
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException("Can't find specified user \"" + login + "\""));
     }
 
     @Transactional

@@ -21,10 +21,11 @@ public class Visitor extends User{
     @Override
     public String toString() {
         return "Visitor" +
-                "\n , login='" + login + '\'' +
-                "\n , firstName='" + firstName + '\'' +
-                "\n , secondName='" + secondName + '\'' +
-                "\n , email='" + email + '\'' +
-                "\n , created=" + created;
+                "\n login='" + login + '\'' +
+                ",\n firstName='" + firstName + '\'' +
+                ",\n secondName='" + secondName + '\'' +
+                ",\n email='" + email + '\'' +
+                ",\n created=" + created +
+                ",\n id=" + id;
     }
 }

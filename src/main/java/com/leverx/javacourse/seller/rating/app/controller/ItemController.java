@@ -35,7 +35,7 @@ public class ItemController {
     public ResponseEntity<ItemResponseDto> saveItem(@RequestBody ItemCreateDto itemCreateDto) {
         Item newItem = itemMapper.toItem(itemCreateDto);
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        newItem.setSeller(userService.findByLogin(userDetails.getUsername()).orElseThrow(EntityNotFoundException::new));
+        newItem.setSeller(userService.findByLogin(userDetails.getUsername()));
         return ResponseEntity.status(HttpStatus.CREATED).body(itemMapper.toItemResponseDto(itemService.save(newItem)));
     }
 
