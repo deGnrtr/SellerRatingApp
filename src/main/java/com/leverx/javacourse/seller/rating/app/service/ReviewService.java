@@ -75,15 +75,15 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review updateReview(Long commentId, Review newReview) {
+    public Review updateReview(Long reviewId, Review newReview) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Review review = findById(commentId);
+        Review review = findById(reviewId);
         Review updatedReview;
         if (userDetails.getUsername().equals(review.getAuthor().getLogin()) || userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))) {
-            updatedReview = reviewDtoMapper.updateReview(review, newReview);
             userService.updateRating((Seller) review.getSeller(), review.getRatingFromReview(), newReview.getRatingFromReview());
+            updatedReview = reviewDtoMapper.updateReview(review, newReview);
         } else throw new UnauthorisedDataModification("Lack of rights.");
         return updatedReview;
     }

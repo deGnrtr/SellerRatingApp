@@ -32,10 +32,12 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "assignedReviews", ignore = true)
+    @Mapping(target = "rating", ignore = true)
+    @Mapping(target = "ownReviews", ignore = true)
     Seller updateSeller(@MappingTarget Seller seller, Seller newSeller);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "assignedReviews", ignore = true)
+    @Mapping(target = "ownReviews", ignore = true)
     Visitor updateVisitor(@MappingTarget Visitor visitor, Visitor newVisitor);
 }

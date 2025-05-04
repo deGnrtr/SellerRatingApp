@@ -131,11 +131,11 @@ public abstract class User {
         this.created = created;
     }
 
-    public List<Review> getOwnComments() {
+    public List<Review> getOwnReviews() {
         return ownReviews;
     }
 
-    public void setOwnComments(List<Review> ownReviews) {
+    public void setOwnCReviews(List<Review> ownReviews) {
         this.ownReviews = ownReviews;
     }
 
