@@ -19,6 +19,6 @@ public class AdministratorService {
 
     @Transactional(readOnly = true)
     public List<Administrator> getAllAdmins (){
-        return (ArrayList<Administrator>) administratorRepository.findAll();
+        return (List<Administrator>) administratorRepository.findAll();
     }
 }
