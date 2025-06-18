@@ -36,6 +36,6 @@ public class AdministratorServiceTest {
         given(this.administratorRepository.findAll()).willReturn(admins);
         var result = administratorService.getAllAdmins();
         assertNotNull(result);
-        assertEquals(result, admins);
+        assertEquals(admins, result);
     }
 }

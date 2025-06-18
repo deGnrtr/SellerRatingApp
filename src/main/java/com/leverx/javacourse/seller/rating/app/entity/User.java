@@ -135,7 +135,7 @@ public abstract class User {
         return ownReviews;
     }
 
-    public void setOwnCReviews(List<Review> ownReviews) {
+    public void setOwnReviews(List<Review> ownReviews) {
         this.ownReviews = ownReviews;
     }
 
