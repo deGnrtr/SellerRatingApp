@@ -58,7 +58,6 @@ public class ItemService {
                 .anyMatch(a -> UserRoles.ADMINISTRATOR.getAuthority().equals(a))){
             repository.deleteById(id);
         } else throw new UnauthorisedDataModification("Lack of rights.");
-        repository.deleteById(id);
     }
 
     @Transactional(readOnly = true)

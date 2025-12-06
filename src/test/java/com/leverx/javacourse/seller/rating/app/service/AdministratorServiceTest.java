@@ -15,6 +15,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AdministratorServiceTest {
@@ -33,9 +35,13 @@ public class AdministratorServiceTest {
                 , "some2@mail.com", LocalDate.now(), UserRoles.ADMINISTRATOR, null, "NOT_ACTIVE");
 
         var admins = List.of(firstAdmin, secondAdmin);
+
         given(this.administratorRepository.findAll()).willReturn(admins);
+
         var result = administratorService.getAllAdmins();
+
         assertNotNull(result);
         assertEquals(admins, result);
+        verify(administratorRepository, times(1)).findAll();
     }
 }
