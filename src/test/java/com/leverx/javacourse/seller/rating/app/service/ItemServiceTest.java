@@ -6,7 +6,6 @@ import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.entity.Visitor;
 import com.leverx.javacourse.seller.rating.app.exception.EntityNotFoundException;
-import com.leverx.javacourse.seller.rating.app.mapper.ItemMapper;
 import com.leverx.javacourse.seller.rating.app.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,16 +32,13 @@ public class ItemServiceTest {
     @Mock
     ItemRepository itemRepository;
 
-    @Mock
-    ItemMapper itemMapper;
-
     @InjectMocks
     ItemService itemService;
 
     private Item item;
 
     @BeforeEach
-    public void setup(){
+    public void setUp() {
         Seller seller = new Seller(1L, "Test seller", "Password", "Biba", "Boba", "test@mail.com", LocalDate.now(),
                 UserRoles.SELLER, null, "VERIFIED", null, null, BigDecimal.TWO);
         Visitor visitor = new Visitor(1L, "Test visitor", "Password", "Pupa", "Lupa", "test@mail.com", LocalDate.now(),
@@ -55,6 +51,7 @@ public class ItemServiceTest {
         item = new Item(1L, "Test", "Item for test", "Some game", LocalDate.now(), LocalDate.now(),
                 seller);
     }
+
     @Test
     public void findById_ReturnsSuccessfully() {
         given(this.itemRepository.findById(1L)).willReturn(Optional.of(item));
@@ -74,7 +71,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void save_SuccessfullySaved(){
+    public void save_SuccessfullySaved() {
         when(this.itemRepository.save(item)).thenReturn(item);
 
         var savedItem = itemService.save(item);
