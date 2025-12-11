@@ -9,11 +9,8 @@ import com.leverx.javacourse.seller.rating.app.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -22,6 +19,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
-    @Spy
+    @Mock
     private ReviewRepository reviewRepository;
 
     @Mock
@@ -60,14 +59,13 @@ class ReviewServiceTest {
         verify(reviewRepository, times(1)).findByIdAndStatus(1L, "VERIFIED");
     }
 
-    //FIXME Try to parametrize all variants of the input arguments
-    @ParameterizedTest
-    @CsvSource({"2, VERIFIED", "1, NOT_VERIFIED"})
-    void findByIdAndStatus_FinishedWithException(Long id, String status) {
-        when(reviewRepository.findByIdAndStatus(1L, "VERIFIED")).thenThrow(new EntityNotFoundException("No review found matching request!"));
+    @Test
+    void findByIdAndStatus_FinishedWithException() {
+        when(reviewRepository.findByIdAndStatus(anyLong(), anyString())).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> reviewService.findByIdAndStatus(id, status));
-        verify(exception.getMessage()).contains("No review found matching request!");
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> reviewService.findByIdAndStatus(anyLong(), anyString()));
+
+        assertEquals(exception.getMessage(), "No review found matching request!");
     }
 
     @Test
