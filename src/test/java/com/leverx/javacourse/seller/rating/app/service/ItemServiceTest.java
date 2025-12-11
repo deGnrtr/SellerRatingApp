@@ -30,10 +30,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
     @Mock
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @InjectMocks
-    ItemService itemService;
+    private ItemService itemService;
 
     private Item item;
 
