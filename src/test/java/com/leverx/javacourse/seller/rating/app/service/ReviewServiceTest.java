@@ -59,7 +59,7 @@ class ReviewServiceTest {
     void findByIdAndStatus_Successfully() {
         when(reviewRepository.findByIdAndStatus(1L, "VERIFIED")).thenReturn(Optional.of(verifiedReview));
 
-        Review requestedReview = reviewService.findByIdAndStatus(1L, "VERIFIED");
+        var requestedReview = reviewService.findByIdAndStatus(1L, "VERIFIED");
 
         assertEquals(verifiedReview, requestedReview);
         verify(reviewRepository, times(1)).findByIdAndStatus(1L, "VERIFIED");
@@ -78,7 +78,7 @@ class ReviewServiceTest {
     void findById_Successfully() {
         when(reviewRepository.findById(1L)).thenReturn(Optional.of(verifiedReview));
 
-        Review requestedReview = reviewService.findById(1L);
+        var requestedReview = reviewService.findById(1L);
 
         assertEquals(verifiedReview, requestedReview);
         verify(reviewRepository, times(1)).findById(1L);
@@ -106,7 +106,7 @@ class ReviewServiceTest {
     void save() {
         when(reviewRepository.save(verifiedReview)).thenReturn(verifiedReview);
 
-        Review savedReview = reviewService.save(verifiedReview);
+        var savedReview = reviewService.save(verifiedReview);
 
         assertEquals(verifiedReview, savedReview);
         verify(reviewRepository, times(1)).save(verifiedReview);
