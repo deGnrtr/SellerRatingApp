@@ -1,7 +1,6 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
 import com.leverx.javacourse.seller.rating.app.entity.Administrator;
-import com.leverx.javacourse.seller.rating.app.entity.UserRoles;
 import com.leverx.javacourse.seller.rating.app.repository.AdministratorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +29,9 @@ public class AdministratorServiceTest {
     public void getAllAdmins_ReturnsValid() {
 
         var firstAdmin = new Administrator(1L, "admin1", "admin", "First", "Admin"
-                , "some1@mail.com", LocalDate.now(), UserRoles.ADMINISTRATOR, null, "ACTIVE");
+                , "some1@mail.com", LocalDate.now(),  null);
         var secondAdmin = new Administrator(1L, "admin2", "admin", "Second", "Admin"
-                , "some2@mail.com", LocalDate.now(), UserRoles.ADMINISTRATOR, null, "NOT_ACTIVE");
+                , "some2@mail.com", LocalDate.now(), null);
 
         var admins = List.of(firstAdmin, secondAdmin);
 

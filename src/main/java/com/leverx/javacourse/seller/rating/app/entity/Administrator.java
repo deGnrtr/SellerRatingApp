@@ -14,7 +14,7 @@ public class Administrator extends User{
     }
 
     public Administrator(Long id, String login, String password, String firstName, String secondName, String email
-            , LocalDate created, UserRoles role, List<Review> ownReviews, String status) {
+            , LocalDate created,  List<Review> ownReviews) {
         super(id, login, password, firstName, secondName, email, created, UserRoles.ADMINISTRATOR, ownReviews, "ACTIVE");
     }
 
