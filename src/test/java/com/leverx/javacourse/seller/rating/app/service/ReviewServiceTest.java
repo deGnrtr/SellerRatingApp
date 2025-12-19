@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,15 +34,16 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
+    @Captor
+    ArgumentCaptor<User> capturedSeller = ArgumentCaptor.forClass(User.class);
+    @Captor
+    ArgumentCaptor<BigDecimal> capturedNewRating = ArgumentCaptor.forClass(BigDecimal.class);
     @Mock
     private ReviewRepository reviewRepository;
-
     @Mock
     private UserService userService;
-
     @InjectMocks
     private ReviewService reviewService;
-
     private Review verifiedReview;
     private Review nonVerifiedReview;
 
@@ -71,7 +73,7 @@ class ReviewServiceTest {
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> reviewService.findByIdAndStatus(anyLong(), anyString()));
 
-        assertEquals(exception.getMessage(), "No review found matching request!");
+        assertEquals("No review found matching request!", exception.getMessage());
     }
 
     @Test
@@ -90,15 +92,16 @@ class ReviewServiceTest {
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> reviewService.findById(anyLong()));
 
-        assertEquals(exception.getMessage(), "No review found matching request!");
+        assertEquals("No review found matching request!", exception.getMessage());
     }
+
     @Test
     void findAllReviews_Successfully() {
         when(reviewRepository.findAllReviewByStatus("VERIFIED")).thenReturn(List.of(verifiedReview));
 
         List<Review> reviews = reviewService.findAllReviews("VERIFIED");
 
-        assertEquals(verifiedReview, reviews);
+        assertEquals(verifiedReview, reviews.getFirst());
         verify(reviewRepository, times(1)).findAllReviewByStatus("VERIFIED");
     }
 
@@ -115,8 +118,6 @@ class ReviewServiceTest {
     @Test
     void verifyReview() {
         when(reviewRepository.findByIdAndStatus(2L, "NOT_VERIFIED")).thenReturn(Optional.of(nonVerifiedReview));
-        ArgumentCaptor<User> capturedSeller = ArgumentCaptor.forClass(User.class);
-        ArgumentCaptor<BigDecimal> capturedNewRating  = ArgumentCaptor.forClass(BigDecimal.class);
         doNothing().when(userService).calculateRating((Seller) capturedSeller.capture(), capturedNewRating.capture());
 
         var verifiedReview = reviewService.verifyReview(2L);

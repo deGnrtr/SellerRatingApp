@@ -56,7 +56,7 @@ class EmailServiceTest {
         verify(javaMailSender, times(1)).send(messageArgumentCaptor.capture());
 
         SimpleMailMessage sentMessage = messageArgumentCaptor.getValue();
-        assertTrue(admins.stream().map(User::getEmail).anyMatch(x->x.equals(sentMessage.getTo()[0])));
+        assertTrue(admins.stream().map(User::getEmail).anyMatch(x -> x.equals(sentMessage.getTo()[0])));
         assertEquals("newUser", sentMessage.getSubject());
         assertEquals("confirmation", sentMessage.getText());
     }

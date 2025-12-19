@@ -56,15 +56,15 @@ public class ItemServiceTest {
     public void findById_ReturnsSuccessfully() {
         given(this.itemRepository.findById(1L)).willReturn(Optional.of(item));
 
-        var requstedItem = itemService.findById(1L);
+        var requestedItem = itemService.findById(1L);
 
-        assertNotNull(requstedItem);
-        assertEquals(item, requstedItem);
+        assertNotNull(requestedItem);
+        assertEquals(item, requestedItem);
         verify(itemRepository, times(1)).findById(1L);
     }
 
     @Test
-    public void findById_FinishedWithException(){
+    public void findById_FinishedWithException() {
         when(this.itemRepository.findById(2L)).thenThrow(EntityNotFoundException.class);
 
         assertThrows(EntityNotFoundException.class, () -> itemService.findById(2L));
