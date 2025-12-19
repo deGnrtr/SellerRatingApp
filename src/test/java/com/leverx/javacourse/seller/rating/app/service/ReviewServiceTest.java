@@ -106,7 +106,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    void save() {
+    void save_Successfully() {
         when(reviewRepository.save(verifiedReview)).thenReturn(verifiedReview);
 
         var savedReview = reviewService.save(verifiedReview);
@@ -116,7 +116,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    void verifyReview() {
+    void verifyReview_Successfully() {
         when(reviewRepository.findByIdAndStatus(2L, "NOT_VERIFIED")).thenReturn(Optional.of(nonVerifiedReview));
         doNothing().when(userService).calculateRating((Seller) capturedSeller.capture(), capturedNewRating.capture());
 
