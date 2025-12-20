@@ -1,5 +1,6 @@
 package com.leverx.javacourse.seller.rating.app.service;
 
+import com.leverx.javacourse.seller.rating.app.dto.UserCreateDto;
 import com.leverx.javacourse.seller.rating.app.entity.Review;
 import com.leverx.javacourse.seller.rating.app.entity.Seller;
 import com.leverx.javacourse.seller.rating.app.entity.User;
@@ -26,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,6 +49,7 @@ class UserServiceTest {
 
     private User visitor;
 
+
     @BeforeEach
     void setUp() {
         seller = new Seller(1L, "Test seller", "Password", "Biba", "Boba", "test@mail.com", LocalDate.now(),
@@ -57,6 +61,7 @@ class UserServiceTest {
     }
 
     //TODO Change test method names to "test..."
+
     @Test
     void findById_Successfully() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(seller));
@@ -69,12 +74,13 @@ class UserServiceTest {
 
     @Test
     void findByIdAndStatus_Successfully() {
-        when(userRepository.findByIdAndStatus(1L, "SELLER")).thenReturn(Optional.of(seller));
+        when(userRepository.findByIdAndStatus(1L, "VERIFIED")).thenReturn(Optional.of(seller));
+//        doReturn(Optional.of(seller)).when(userRepository.findByIdAndStatus(1L, "VERIFIED"));
 
-        var requestedUser = userService.findByIdAndStatus(1L, "SELLER");
+        var requestedUser = userService.findByIdAndStatus(1L, "VERIFIED");
 
         assertEquals(seller, requestedUser);
-        verify(userRepository, times(1)).findByIdAndStatus(1L, "SELLER");
+        verify(userRepository, times(1)).findByIdAndStatus(1L, "VERIFIED");
     }
 
     @Test
@@ -106,22 +112,48 @@ class UserServiceTest {
     }
 
     @Test
-    void getAllVisitors() {
+    void getAllVisitors_Successfully() {
+        when(visitorRepository.findAllByStatus("VERIFIED")).thenReturn(List.of((Visitor) visitor));
+
+        var requestedVisitor = userService.getAllVisitors("VERIFIED").getFirst();
+
+        assertEquals(visitor, requestedVisitor);
+        verify(visitorRepository, times(1)).findAllByStatus("VERIFIED");
     }
 
     @Test
-    void createUser() {
+    void createSeller_Successfully() {
+        UserCreateDto sellerToCreate = new UserCreateDto();
+        sellerToCreate.setRole("SELLER");
+        when(userMapper.toSeller(sellerToCreate)).thenReturn((Seller) seller);
+        when(sellerRepository.save((Seller) seller)).thenReturn((Seller) seller);
+
+        var savedUser = userService.createUser(sellerToCreate);
+
+        assertEquals("SELLER", savedUser.getRole().getAuthority());
+        verify(sellerRepository, times(1)).save(isA(Seller.class));
     }
 
     @Test
-    void calculateRating() {
+    void createVisitor_Successfully() {
+        UserCreateDto visitorToCreate = new UserCreateDto();
+        visitorToCreate.setRole("VISITOR");
+        when(userMapper.toVisitor(visitorToCreate)).thenReturn((Visitor) visitor);
+        when(visitorRepository.save((Visitor) visitor)).thenReturn((Visitor) visitor);
+
+        var savedUser = userService.createUser(visitorToCreate);
+
+        assertEquals("VISITOR", savedUser.getRole().getAuthority());
+        verify(visitorRepository, times(1)).save(isA(Visitor.class));
     }
 
     @Test
-    void updateRating() {
-    }
+    void verifyUser_Successfully() {
+        User unverifyedUser = new Seller(3L, "New seller", "Password", "Cheeke", "Breeke", "test@mail.com", LocalDate.now(),
+                UserRoles.SELLER, null, "NOT_VERIFIED", null, null, BigDecimal.TWO);
+        doReturn(Optional.of(unverifyedUser)).when(userRepository).findByIdAndStatus(3L, "NOT_VERIFIED");
+        userService.verifyUser(3L);
 
-    @Test
-    void verifyUser() {
+        assertEquals("VERIFIED", unverifyedUser.getStatus());
     }
 }

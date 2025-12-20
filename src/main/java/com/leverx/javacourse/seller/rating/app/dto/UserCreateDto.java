@@ -11,6 +11,8 @@ public class UserCreateDto {
     private List<ReviewCreateDto> assignedReviews;
     private String role;
 
+
+
     public String getLogin() {
         return login;
     }
