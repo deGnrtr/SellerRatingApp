@@ -25,8 +25,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -45,9 +43,9 @@ class UserServiceTest {
     private UserMapper userMapper;
     @InjectMocks
     private UserService userService;
-    private User seller;
+    User seller;
 
-    private User visitor;
+    User visitor;
 
 
     @BeforeEach
@@ -73,9 +71,14 @@ class UserServiceTest {
     }
 
     @Test
+    void findById_FinishedWithException() {
+    EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> userService.findById(2L));
+    assertEquals("No user found matching request!", exception.getMessage());
+    }
+
+    @Test
     void findByIdAndStatus_Successfully() {
         when(userRepository.findByIdAndStatus(1L, "VERIFIED")).thenReturn(Optional.of(seller));
-//        doReturn(Optional.of(seller)).when(userRepository.findByIdAndStatus(1L, "VERIFIED"));
 
         var requestedUser = userService.findByIdAndStatus(1L, "VERIFIED");
 
@@ -85,9 +88,7 @@ class UserServiceTest {
 
     @Test
     void findByIdAndStatus_FinishedWithException() {
-        when(userRepository.findByIdAndStatus(anyLong(), anyString())).thenReturn(Optional.empty());
-
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> userService.findByIdAndStatus(anyLong(), anyString()));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> userService.findByIdAndStatus(2L, "VERIFIED"));
         assertEquals("No user found matching request!", exception.getMessage());
     }
 
@@ -101,6 +102,11 @@ class UserServiceTest {
         verify(userRepository, times(1)).findByLogin("Biba");
     }
 
+    @Test
+    void findByLogin_FinishedWithException() {
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> userService.findByLogin("Pupa"));
+        assertEquals("Can't find specified user \"Pupa\"", exception.getMessage());
+    }
     @Test
     void getAllSellers_Successfully() {
         when(sellerRepository.findAllSellersByCriteria("gameTitle", new BigDecimal(1), new BigDecimal(7), "VERIFIED")).thenReturn(List.of((Seller) seller));
