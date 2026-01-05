@@ -11,11 +11,14 @@ import com.leverx.javacourse.seller.rating.app.mapper.UserMapper;
 import com.leverx.javacourse.seller.rating.app.repository.SellerRepository;
 import com.leverx.javacourse.seller.rating.app.repository.UserRepository;
 import com.leverx.javacourse.seller.rating.app.repository.VisitorRepository;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -25,6 +28,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -41,7 +45,6 @@ class UserServiceTest {
     private UserRepository<User> userRepository;
     @Mock
     private UserMapper userMapper;
-    @InjectMocks
     private UserService userService;
     User seller;
 
@@ -50,6 +53,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
+        userService = new UserService(sellerRepository, visitorRepository, userRepository, userMapper);
         seller = new Seller(1L, "Test seller", "Password", "Biba", "Boba", "test@mail.com", LocalDate.now(),
                 UserRoles.SELLER, null, "VERIFIED", null, null, BigDecimal.TWO);
         visitor = new Visitor(1L, "Test visitor", "Password", "Pupa", "Lupa", "test@mail.com", LocalDate.now(),
@@ -57,8 +61,6 @@ class UserServiceTest {
         var review = new Review(1L, "First review", LocalDate.now(), "VERIFIED", BigDecimal.TEN, visitor, seller);
         ((Seller) seller).setAssignedReviews(List.of(review));
     }
-
-    //TODO Change test method names to "test..."
 
     @Test
     void findById_Successfully() {
@@ -78,12 +80,12 @@ class UserServiceTest {
 
     @Test
     void findByIdAndStatus_Successfully() {
-        when(userRepository.findByIdAndStatus(1L, "VERIFIED")).thenReturn(Optional.of(seller));
+        when(userRepository.findByIdAndStatus(3L, "VERIFIED")).thenReturn(Optional.of(seller));
 
-        var requestedUser = userService.findByIdAndStatus(1L, "VERIFIED");
+        var requestedUser = userService.findByIdAndStatus(3L, "VERIFIED");
 
         assertEquals(seller, requestedUser);
-        verify(userRepository, times(1)).findByIdAndStatus(1L, "VERIFIED");
+        verify(userRepository, times(1)).findByIdAndStatus(3L, "VERIFIED");
     }
 
     @Test
@@ -94,7 +96,7 @@ class UserServiceTest {
 
     @Test
     void findByLogin_Successfully() {
-        when(userRepository.findByLogin("Biba")).thenReturn(Optional.of(seller));
+        when(userRepository.findByLogin(eq("Biba"))).thenReturn(Optional.of(seller));
 
         var requestedUser = userService.findByLogin("Biba");
 
@@ -155,10 +157,10 @@ class UserServiceTest {
 
     @Test
     void verifyUser_Successfully() {
-        User unverifyedUser = new Seller(3L, "New seller", "Password", "Cheeke", "Breeke", "test@mail.com", LocalDate.now(),
+        User unverifyedUser = new Seller(4L, "New seller", "Password", "Cheeke", "Breeke", "test@mail.com", LocalDate.now(),
                 UserRoles.SELLER, null, "NOT_VERIFIED", null, null, BigDecimal.TWO);
-        doReturn(Optional.of(unverifyedUser)).when(userRepository).findByIdAndStatus(3L, "NOT_VERIFIED");
-        userService.verifyUser(3L);
+        doReturn(Optional.of(unverifyedUser)).when(userRepository).findByIdAndStatus(4L, "NOT_VERIFIED");
+        userService.verifyUser(4L);
 
         assertEquals("VERIFIED", unverifyedUser.getStatus());
     }
